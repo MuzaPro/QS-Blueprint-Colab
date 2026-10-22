@@ -1,0 +1,15 @@
+# Blender backup files
+*.blend1
+
+# Renders
+*.mov
+*.exr
+06_shots/Seq_04_membrane_science/render/final/
+
+# Node.js
+node_modules/
+
+# Large asset files
+13_heavy_files/
+01_admin/meetings/recordings
+01_admin/meetings/video_meetings/
