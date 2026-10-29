@@ -1,0 +1,27 @@
+Adobe After Effects v26.0 Windows 64 Renderprotokoll für Projekt 'CLaude-Artifacts_v1.aep'
+
+Rendervorgang gestartet am 27.10.2026 um 18:48:02
+
+  27.10.2026 18:48:02: Komposition 'Card-16_Test-Preview 2' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card-16_Test-Preview 2_Card_16B_GENERATE_0_[#####].mov    27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' beendet.
+
+
+  27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card-16_Test-Preview 2_Card_16B_TRANSIT_1_[#####].mov    27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' beendet.
+
+
+  27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card-16_Test-Preview 2_Card_16B_LOCK_2_[#####].mov    27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' beendet.
+
+
+  27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card-16_Test-Preview 2_Card_16B_FADE OUT_3_[#####].mov    27.10.2026 18:48:03: Komposition 'Card-16_Test-Preview 2' beendet.
+
+
+  Bish. Renderz.: 1 Sekunden
+Das Protokoll wurde am 27.10.2026 um 18:48:03 geschlossen.
+

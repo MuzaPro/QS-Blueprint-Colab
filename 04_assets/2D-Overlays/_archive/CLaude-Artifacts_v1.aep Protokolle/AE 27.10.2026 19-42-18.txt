@@ -1,0 +1,17 @@
+Adobe After Effects v26.0 Windows 64 Renderprotokoll für Projekt 'CLaude-Artifacts_v1.aep'
+
+Rendervorgang gestartet am 27.10.2026 um 19:42:18
+
+  27.10.2026 19:42:18: Komposition 'Card_13-14_Atom-Photon' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_13-14_Atom-Photon.png    27.10.2026 19:42:18: Komposition 'Card_13-14_Atom-Photon' beendet.
+
+
+  27.10.2026 19:42:18: Komposition 'Card_13-14_Atom-Photon' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_13-14_Atom-Photon (0-00-10-14).png    27.10.2026 19:42:19: Komposition 'Card_13-14_Atom-Photon' beendet.
+
+
+  Bish. Renderz.: 1 Sekunden
+Das Protokoll wurde am 27.10.2026 um 19:42:19 geschlossen.
+

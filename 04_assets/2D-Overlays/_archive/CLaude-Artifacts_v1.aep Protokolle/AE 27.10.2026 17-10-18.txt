@@ -1,0 +1,22 @@
+Adobe After Effects v26.0 Windows 64 Renderprotokoll für Projekt 'CLaude-Artifacts_v1.aep'
+
+Rendervorgang gestartet am 27.10.2026 um 17:10:18
+
+  27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_13-14_Atom-Photon (0-00-04-16).png  After Effects Warnung: Rückgängigmachen nicht übereinstimmender Gruppen: es wird versucht, den Fehler zu beheben.  27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' beendet.
+
+
+  27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_13-14_Atom-Photon (0-00-10-00).png    27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' beendet.
+
+
+  27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_13-14_Atom-Photon (0-00-13-21).png    27.10.2026 17:10:18: Komposition 'Card_13-14_Atom-Photon' beendet.
+
+
+  Bish. Renderz.: 0 Sekunden
+Das Protokoll wurde am 27.10.2026 um 17:10:18 geschlossen.
+

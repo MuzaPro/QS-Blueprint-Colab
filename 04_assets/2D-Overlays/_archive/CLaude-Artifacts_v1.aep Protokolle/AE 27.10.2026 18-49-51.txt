@@ -1,0 +1,37 @@
+Adobe After Effects v26.0 Windows 64 Renderprotokoll für Projekt 'CLaude-Artifacts_v1.aep'
+
+Rendervorgang gestartet am 27.10.2026 um 18:49:51
+
+  27.10.2026 18:49:51: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_1  _0_[#####].mov    27.10.2026 18:49:51: Komposition 'Card_16B' beendet.
+
+
+  27.10.2026 18:49:51: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_2_1_[#####].mov    27.10.2026 18:49:51: Komposition 'Card_16B' beendet.
+
+
+  27.10.2026 18:49:51: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_3_2_[#####].mov    27.10.2026 18:49:51: Komposition 'Card_16B' beendet.
+
+
+  27.10.2026 18:49:51: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_4_3_[#####].mov    27.10.2026 18:49:51: Komposition 'Card_16B' beendet.
+
+
+  27.10.2026 18:49:51: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_5_4_[#####].mov    27.10.2026 18:49:52: Komposition 'Card_16B' beendet.
+
+
+  27.10.2026 18:49:52: Komposition 'Card_16B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_16B_Card_16_6_5_[#####].mov    27.10.2026 18:49:52: Komposition 'Card_16B' beendet.
+
+
+  Bish. Renderz.: 1 Sekunden
+Das Protokoll wurde am 27.10.2026 um 18:49:52 geschlossen.
+
