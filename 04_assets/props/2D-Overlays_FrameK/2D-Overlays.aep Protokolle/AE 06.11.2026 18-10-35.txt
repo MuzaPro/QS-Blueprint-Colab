@@ -1,0 +1,17 @@
+Adobe After Effects v26.0 Windows 64 Renderprotokoll für Projekt '2D-Overlays.aep'
+
+Rendervorgang gestartet am 06.11.2026 um 18:10:35
+
+  06.11.2026 18:10:35: Komposition 'Card_18_compute-B' gestartet.
+
+  Speichern unter: C:\Users\yanni\Downloads\Card_18_compute-B (0-00-24-03).png    06.11.2026 18:10:36: Komposition 'Card_18_compute-B' beendet.
+
+
+  06.11.2026 18:10:37: Komposition 'Card_15' gestartet.
+
+  Speichern unter: C:\Users\yanni\Downloads\Card_15 (0-00-01-21).png    06.11.2026 18:10:37: Komposition 'Card_15' beendet.
+
+
+  Bish. Renderz.: 2 Sekunden
+Das Protokoll wurde am 06.11.2026 um 18:10:37 geschlossen.
+
