@@ -1,0 +1,17 @@
+Adobe After Effects v26.5 Windows 64 Renderprotokoll für Projekt '2D-Overlays2.aep'
+
+Rendervorgang gestartet am 12.11.2026 um 16:37:45
+
+  12.11.2026 16:37:46: Komposition 'Card_18' gestartet.
+
+  Speichern unter: C:\Users\yanni\Downloads\Card_18.png    12.11.2026 16:37:47: Komposition 'Card_18' beendet.
+
+
+  12.11.2026 16:37:47: Komposition 'Card_10' gestartet.
+
+  Speichern unter: C:\Drive_Frame\SynologyDrive\001_Projektumsetzung\Muza_Productions\001_The_QS_Blueprint\_Git\QS-Blueprint-Colab\04_assets\props\2D-Overlays_FrameK\03_Render\Card_10\Card_10_v1.mp4    12.11.2026 16:37:55: Komposition 'Card_10' beendet.
+
+
+  Bish. Renderz.: 10 Sekunden
+Das Protokoll wurde am 12.11.2026 um 16:37:55 geschlossen.
+
