@@ -1,0 +1,26 @@
+ 
+================================================================ 
+ SESSION STARTED: Sat 11/14/2026  20:14:51.95                               
+ Blender:    C:\Program Files\Blender Foundation\Blender 5.2\blender.exe                                     
+ Blend file: C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_1\sh_01_03quantum_computers_room.blend                                      
+ Frames:     50 to 150                      
+ Batch size: 3  |  Cooldown: 120s       
+================================================================ 
+[20:14:51.99]  Rendering frame 50 ... 
+[20:15:20.56]  Frame 50 OK — 28.5s  |  avg 28.5s/frame  |  1/101 done 
+[20:15:20.61]  Rendering frame 51 ... 
+[20:15:48.32]  Frame 51 OK — 27.6s  |  avg 28.0s/frame  |  2/101 done 
+[20:15:48.35]  Rendering frame 52 ... 
+[20:16:15.71]  Frame 52 OK — 27.3s  |  avg 27.8s/frame  |  3/101 done 
+[20:16:15.72]  Batch 1 complete. 3/101 done. Avg 27.8s/frame. Est ~0h45m left. Cooling 120s. 
+ 
+================================================================ 
+ SESSION STARTED: Sat 11/14/2026  20:16:58.71                               
+ Blender:    C:\Program Files\Blender Foundation\Blender 5.2\blender.exe                                     
+ Blend file: C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_1\sh_01_03quantum_computers_room.blend                                      
+ Frames:     53 to 150                      
+ Batch size: 3  |  Cooldown: 30s       
+================================================================ 
+[20:16:58.75]  Rendering frame 53 ... 
+[20:18:32.49]  Frame 53 OK — 93.7s  |  avg 93.7s/frame  |  1/98 done 
+[20:18:32.50]  Rendering frame 54 ... 
