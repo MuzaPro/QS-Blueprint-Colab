@@ -49,8 +49,8 @@ set "BLEND_NAME=sh_01_03quantum_computers_room.blend"
 ::  Example:  START_FRAME=1  /  END_FRAME=250  renders frames 1-250
 :: ================================================================
 
-set /a START_FRAME=53
-set /a END_FRAME=150
+set /a START_FRAME=1
+set /a END_FRAME=49
 
 
 :: ================================================================
