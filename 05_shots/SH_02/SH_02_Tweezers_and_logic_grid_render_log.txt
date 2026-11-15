@@ -1,0 +1,9 @@
+ 
+================================================================ 
+ SESSION STARTED: Mon 11/16/2026   0:02:32.23                               
+ Blender:    C:\Program Files\Blender Foundation\Blender 5.2\blender.exe                                     
+ Blend file: C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_02\SH_02_Tweezers_and_logic_grid.blend                                      
+ Frames:     1 to 150                      
+ Batch size: 2  |  Cooldown: 30s       
+================================================================ 
+[ 0:02:32.26]  Rendering frame 1 ... 
