@@ -1,0 +1,17 @@
+Adobe After Effects v27.0 Windows 64 Renderprotokoll für Projekt '2D-Overlays3.aep'
+
+Rendervorgang gestartet am 17.11.2026 um 16:52:13
+
+  17.11.2026 16:52:14: Komposition 'Card_04' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_04_1.mp4    17.11.2026 16:52:24: Komposition 'Card_04' beendet.
+
+
+  17.11.2026 16:52:24: Komposition 'Card_04' gestartet.
+
+  Speichern unter: C:\Users\yanni\Desktop\Temp\Card_04_2.mp4    17.11.2026 16:52:34: Komposition 'Card_04' beendet.
+
+
+  Bish. Renderz.: 21 Sekunden
+Das Protokoll wurde am 17.11.2026 um 16:52:34 geschlossen.
+
