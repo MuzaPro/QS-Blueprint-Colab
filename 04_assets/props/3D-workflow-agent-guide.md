@@ -5,6 +5,12 @@ This replaces `PROPS_AGENT_GUIDE.md` for 3D work; that guide only covers HTML sc
 
 Add to this file whenever you learn something that would have saved you time.
 
+> **⚠️ ALWAYS STATE THE BLEND FILE.** Every summary you give after touching a `.blend` must open with a clear, prominent line naming the full path of each file you worked on and whether you saved it, e.g.
+>
+> **📁 Blend file: `04_assets/props/ai_models/trays_setup.blend` (saved)**
+>
+> Put it at the top of the summary, not buried in the text. If you only read a file or rendered from it without saving, say that instead.
+
 ---
 
 ## 1. How we work together
@@ -15,6 +21,8 @@ Add to this file whenever you learn something that would have saved you time.
 - **Hero objects stay real objects.** When one unit gets hand-animated (a chip landing on it, a camera focusing on it), keep it as a normal object. The geo-nodes array leaves an empty slot for it (a *Hide Hero Slot* toggle) instead of instancing it.
 - **Make models swappable.** The user often swaps in a more detailed model later. Read dimensions from the instanced object's bounding box rather than hard-coding them.
 - **Shots are short (often under 4 s at 25 fps).** Pick defaults (falloff widths, distances) so motion reads quickly.
+- **Reference, don't copy.** Competitor references (e.g. PsiQuantum renders) show *what* the hardware is. Our models must be recognisable to engineers but clearly our own design: change the palette, layout, part shapes and details. Never reproduce their logos, text, colour scheme or an artist's specific composition.
+- **Cyan is reserved for the client.** Never use cyan or teal on competitor hardware.
 - **Report honestly.** Say what was verified (logic checks, grey renders) and what wasn't (Cycles look, the shot camera).
 
 ## 2. Project conventions
@@ -69,6 +77,10 @@ getattr(mod.properties.inputs, sid).value = some_object
 - Use `ORIGINAL` for the object being instanced, so its scene position doesn't matter.
 - Use `RELATIVE` for effector or controller objects, so their location is in the modifier object's space.
 
+**Mesh materials: append the slots *before* `bm.to_mesh(me)`.** Calling `me.materials.clear()` after writing the geometry resets every face's `material_index` to 0, so the whole model renders in the first material.
+
+**No system Python on this machine.** `python` opens the Microsoft Store stub. Edit script files with the Edit tool or `sed`, and run Python only through Blender.
+
 **Probe before guessing.** When a socket name or attribute is uncertain, run a 5-line `--factory-startup` script that prints `[(s.name, s.identifier) for s in node.inputs]` or `dir(obj)`. This is much cheaper than a failed build.
 
 ## 5. Verifying your work
@@ -81,7 +93,8 @@ getattr(mod.properties.inputs, sid).value = some_object
    ```
    Test several controller positions (before, during and after the effect) and print counts and offsets.
 2. **Quick visual check.** Use a Workbench render (`BLENDER_WORKBENCH`, studio light, `file_format='PNG'`, view transform `Standard`) from a temporary camera, saved to the scratchpad, then view the PNG. Without `file_format='PNG'` it writes EXR, which can't be viewed directly. Renders take about 3 s.
-3. Look for things that seem like bugs but aren't. For example, the tray model is two halves, so a stack can look like two columns from some angles.
+3. **Look-dev check.** For materials, use a Cycles preview: about 48 samples, denoise, GPU, a near-black world, and temporary area lights (key about 7 W, rim about 4 W warm, fill about 1 W at prop scale). Brighter lights wash blacks to grey and desaturate emissive parts. Run the build script with `SAVE = False` inside the preview script (`exec(open(build).read())`), so you can iterate without touching the file and save only once the look is approved.
+4. Look for things that seem like bugs but aren't. For example, the tray model is two halves, so a stack can look like two columns from some angles.
 
 ## 6. Pattern library
 
@@ -95,6 +108,17 @@ getattr(mod.properties.inputs, sid).value = some_object
 - **Instance on Points** with Object Info (*As Instance*, `ORIGINAL`).
 - Animate the effector's Z to sweep the effect through the stack.
 - Hide the source object in the viewport and in renders.
+
+### Swapping a placeholder for a detailed model (`build_tray_connector_v3.py`)
+- v3 is the current tray: a satin-nickel cold plate and back rail, gold-plated chip carrier and thermal-link pads, a navy soldermask board, grey connectors with gold contact rows, a violet silicon die, and yellow single-mode fibres with clips. It has no LEDs (a cryo board wouldn't), plus surface-mount parts, traces, vias, a datamatrix, and tapped holes and seams on the outer faces for the stacked look. It's about 23k verts.
+- Re-running the script rebuilds the meshes in place (`TrayConnector_v3*`, `PhotonicChip_v3`), deletes older generated meshes and unused `TC_` materials, and keeps the original placeholders in `spare_parts`.
+- Helpers worth reusing: `side_xf(face, a, b)` places parts on the outer faces (back, front, sides); `strip()` draws PCB traces; `tube()` with `smooth_path()` (Catmull-Rom) makes cables, fibres and leads; `socket_screw()`, `round_rect()`, `chamfer_rect()`.
+- Check medium close-ups from several angles (hero, mid, chip, back of stack). The back view matters because the box shot shows the trays from behind.
+- Model procedurally with bmesh helpers (extruded outline `prism`, `box`, rounded box, cylinder, swept `ribbon`), each part beveled and given a material index. Keep the model inside the placeholder's bounding box so stack spacing doesn't change.
+- Swap by assigning `ob.data = new_mesh`. This keeps the object's name, animation, parenting and any geo-nodes references.
+- Move the old mesh onto a hidden `<name>_placeholder` object in `spare_parts`, so nothing is lost.
+- The `Tray-connector-with_chip` instance source is the tray plus the chip joined into one mesh. The hero tray and `photonic_chip` (its child) stay separate so the chip can be animated landing on it.
+- Prefix materials with `TC_`. Avoid real company logos and text: use generic white silkscreen blocks instead.
 
 ---
 
