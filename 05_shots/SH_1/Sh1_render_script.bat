@@ -50,7 +50,7 @@ set "BLEND_NAME=sh_01_03quantum_computers_room.blend"
 :: ================================================================
 
 set /a START_FRAME=1
-set /a END_FRAME=49
+set /a END_FRAME=150
 
 
 :: ================================================================

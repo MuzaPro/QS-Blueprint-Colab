@@ -49,8 +49,8 @@ set "BLEND_NAME=SH_02_Tweezers_and_logic_grid.blend"
 ::  Example:  START_FRAME=1  /  END_FRAME=250  renders frames 1-250
 :: ================================================================
 
-set /a START_FRAME=1
-set /a END_FRAME=150
+set /a START_FRAME=40
+set /a END_FRAME=74
 
 :: ================================================================
 ::  STEP 3 — SAFETY SETTINGS (OPTIONAL)               <-- EDIT THIS
@@ -64,7 +64,7 @@ set /a END_FRAME=150
 ::                 Increase to 180-300 if your GPU runs very hot.
 :: ================================================================
 
-set /a BATCH_SIZE=2
+set /a BATCH_SIZE=4
 set /a COOLDOWN_SEC=30
 
 
