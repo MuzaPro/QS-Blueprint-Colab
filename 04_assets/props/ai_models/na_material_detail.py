@@ -23,7 +23,7 @@ LEVELS = {
     'fugly': dict(rv=0.10, smudge=0.75, scratch=0.8, dust=0.55, grime=0.7, peel=0.03),
 }
 # material -> (kind, pattern scale multiplier)
-TARGETS = {
+TARGETS = globals().get("TARGETS") or {
     'NA_graphite': ('paint', 1.0), 'NA_logo_panel': ('paint', 1.3), 'NA_panel_grey': ('paint', 2.0),
     'NA_black': ('paint', 3.0), 'NA_extrusion': ('metal', 1.5), 'NA_stainless': ('metal', 3.0),
     'NA_stainless_b': ('metal', 3.0), 'NA_alu': ('metal', 3.0), 'NA_panel_alu': ('metal', 2.0),
