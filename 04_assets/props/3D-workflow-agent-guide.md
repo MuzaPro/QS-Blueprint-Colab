@@ -31,6 +31,7 @@ Add to this file whenever you learn something that would have saved you time.
 |---|---|
 | Blender | 5.2 LTS — `C:\Program Files\Blender Foundation\Blender 5.2\blender.exe` (3.6–5.1 also installed; don't use them) |
 | Final render engine | Cycles (some files are saved with EEVEE set; leave the engine alone unless asked) |
+| Render device | **GPU, not CPU.** The machine has an NVIDIA RTX 3080: use `OPTIX` (CUDA as fallback). In scripts, set `prefs.compute_device_type='OPTIX'`, call `prefs.get_devices()`, enable the devices, and set `scene.cycles.device='GPU'` for every Cycles render, including previews |
 | Frame rate | 25 fps |
 | Units | metres, scale 1.0; props are real-world sized (e.g. one tray is about 0.146 × 0.29 × 0.017 m) |
 | Visual style | Dark, premium tech look. Ask about colour schemes; don't invent a brand palette |
@@ -38,6 +39,14 @@ Add to this file whenever you learn something that would have saved you time.
 
 Record per-file axis conventions here as you learn them:
 - `trays_setup.blend`: trays lie flat in XY and stack up along +Z. The tray's back faces −X. The effector pushes trays along −X.
+- `chandelier-holder.blend` (built by `build_chandelier_holder.py`): asset origin = the chandelier (`Quantum_Comp`) origin, so place both at the same point. Floor is at z = −1.55, the chandelier top plate (r 1.51) sits at z = 3.35 under the deck beams, and the front faces −Y (rack on −X, compressor and gas cabinets on +X). The linked `REF_chandelier` collection is only there to check the fit. Link or append the `chandelier-holder` collection, not the REF one.
+
+- `neutral_atom_qc.blend` (built by `build_neutral_atom_qc.py`): SH_1 competitor mockup, so red lasers only and no cyan. Floor at z = 0, front faces −Y, root empty `NAQC_root` at the origin. The main body is 2.9 × 1.5 m (x ±1.45), with the rack on −X and the service cabinet on +X (4.2 m wide overall, 2.45 m tall). The table top is at z = 0.90 and beams run at z = 0.975. The chamber centre is (0.35, 0, 1.15): empty `NAQC_Atoms`, with `NAQC_DiveTarget` just in front of the big front viewport. The interior MOT beams were removed on purpose (they read as a red "X" in the dive). Blank `NA_logo_panel` areas mark where the logo goes: the plinth centre door, the crown fascia, the service-cabinet side and the laser modules.
+  - **Don't re-run `build_neutral_atom_qc.py` on it any more.** The user has since added cameras (`Dive-Cam`, `Wide-shot`, timeline marker F_124), lights, the logo and bevel modifiers by hand, and a rebuild would wipe them. Edit the saved file instead. Its materials carry the subtle `clean` level of `na_material_detail.py`. The file is meant to be shared with the Blender community as the "aesthetic" version.
+- `neutral_atom_qc_fugly.blend` (built by `build_neutral_atom_qc_fugly.py`, which reads the clean file and never writes to it): this is the SH_1 version, "a lab setup forced into a box". It uses institutional-grey powder coat, clear-anodised extrusions, a yellowed `NA_panel_replaced` panel, dull accent strips and cool fluorescent hood light. It adds blackout cloth, tape, stickers and labels, an open rack door, `NA_Door_R` slid 0.24 m to the left, and cable spaghetti, all as `NAF_*` objects in `NAQC_Fugly`. Materials use the `fugly` level (dust and AO grime). The Dive-Cam path (frames 103–168) was checked clear of the clutter.
+- `neutral_atom_qc_cables.blend` (built by `build_neutral_atom_qc_cables.py`): the in-between version, which is the elegant file plus only the cable spaghetti (`NAQC_Cable_Mess` collection, with the rack door open and `NA_Door_R` ajar). The wrapper runs the fugly builder with `PARTS = ("cables",)`. The fugly builder's layers (`palette`, `screws`, `cloth`, `tape`, `cables`) can each be toggled through `PARTS`. Because the random sequence shifts when layers are skipped, cable layouts differ slightly between the variants.
+- SH_1 shot file (`05_shots/SH_1/sh_01_04quantum_computers_room-AI-assisted.blend`): the cables version is **appended** (not linked) as collection `NAQC`. `NAQC_root` sits at (4.991, −2.902, −1.242), which is the floor under the centre of the hidden marker cube `Neutral_atoms_Quantum_computer-placement`. It is at real scale and faces −Y. The atoms are at world (5.341, −2.902, −0.092). The logo was parented to `NAQC_root`, so the whole machine moves and scales from the root.
+- `na_material_detail.py`: rebuilds the bulk NA_ materials with object-space noise roughness, smudges, sparse rotated-Voronoi scratches, an orange-peel bump and, at the `fugly` level, dust and grime. Base values are cached in `m["na_base"]`, so it's idempotent. `OVERRIDES` recolours materials for one run. Glass gets no bump, because bump makes it look rippled.
 
 ## 3. Driving Blender headlessly
 
@@ -78,6 +87,12 @@ getattr(mod.properties.inputs, sid).value = some_object
 - Use `RELATIVE` for effector or controller objects, so their location is in the modifier object's space.
 
 **Mesh materials: append the slots *before* `bm.to_mesh(me)`.** Calling `me.materials.clear()` after writing the geometry resets every face's `material_index` to 0, so the whole model renders in the first material.
+
+**bmesh bevel scrambles "new verts by index".** Collecting a part's vertices as `bm.verts[n:]` after `bmesh.ops.bevel` picks the wrong set, so transforms hit only part of the mesh and you get shards. Build each primitive in a scratch bmesh, transform it there, then copy its verts and faces into the object's bmesh (see `MB._fin` in `build_neutral_atom_qc.py`).
+
+**Timeline markers bound to cameras override `scene.camera`.** If every preview comes out from the same camera, check `scene.timeline_markers` for `.camera` bindings. Set `mk.camera = None` in the preview script only (never save it).
+
+**Add-on noise when opening user files.** Opening a `.blend` without `--factory-startup` loads the user's add-ons (Bagapie, population, AI-Render, rbc), which print tracebacks that look like failures. Prefer `--factory-startup` and call `bpy.ops.wm.open_mainfile()` inside the script, or filter for your own markers.
 
 **No system Python on this machine.** `python` opens the Microsoft Store stub. Edit script files with the Edit tool or `sed`, and run Python only through Blender.
 
