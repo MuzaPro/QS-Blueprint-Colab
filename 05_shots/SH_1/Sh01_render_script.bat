@@ -50,7 +50,7 @@ set "BLEND_NAME=sh_01_04quantum_computers_room-AI-assisted.blend"
 :: ================================================================
 
 set /a START_FRAME=1
-set /a END_FRAME=150
+set /a END_FRAME=200
 
 
 :: ================================================================
@@ -65,8 +65,12 @@ set /a END_FRAME=150
 ::                 Increase to 180-300 if your GPU runs very hot.
 :: ================================================================
 
-set /a BATCH_SIZE=2
-set /a COOLDOWN_SEC=20
+set /a BATCH_SIZE=5
+set /a COOLDOWN_SEC=60
+
+:: FRAME_TIMEOUT_SEC - a frame running longer than this is treated as frozen,
+::                     killed and retried (a normal SH_1 frame takes ~50 s).
+set /a FRAME_TIMEOUT_SEC=100
 
 
 :: ================================================================
@@ -198,7 +202,10 @@ title [Rendering] Frame %CURRENT% / %END_FRAME%  ^|  Avg: !AVG_S!.!AVG_D!s/frame
 echo [%time%]  Rendering frame %CURRENT% / %END_FRAME% ...
 echo [%time%]  Rendering frame %CURRENT% ... >> "%LOG_FILE%"
 
-"%BLENDER_EXE%" -b "%BLEND_FILE%" -f %CURRENT%
+:: render_frame_watchdog.ps1 runs Blender with --factory-startup (no user add-ons) and
+:: render_gpu_setup.py (re-enables OptiX). If Blender freezes for longer than
+:: FRAME_TIMEOUT_SEC it is killed and the frame retried (Blender 5.2 hangs now and then).
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0render_frame_watchdog.ps1" -Blender "%BLENDER_EXE%" -Blend "%BLEND_FILE%" -Setup "%~dp0render_gpu_setup.py" -Frame %CURRENT% -TimeoutSec %FRAME_TIMEOUT_SEC% -Retries 3 -Log "%LOG_FILE%"
 
 if errorlevel 1 (
     echo.

@@ -36,21 +36,37 @@ setlocal enabledelayedexpansion
 ::  Example:  set "BLEND_NAME=my_shot.blend"
 :: ================================================================
 
-set "BLEND_NAME=SH_02_Tweezers_and_logic_grid.blend"
+set "BLEND_NAME=SH_02_Tweezers_and_logic_grid_v02.blend"
 
 
 :: ================================================================
-::  STEP 2 — FRAME RANGE                              <-- EDIT THIS
+::  STEP 2 — SCENES, FRAME RANGES, OUTPUT                <-- EDIT THIS
 :: ----------------------------------------------------------------
-::  Set the first and last frame you want to render.
-::  You can find these numbers in Blender's Timeline or
-::  Output Properties panel (camera icon in the Properties panel).
+::  This blend has TWO scenes that share the same camera move:
+::    Scene      = atomic layer (tweezers, atoms, vacuum chamber)
+::    Scene.001  = logic layer  (qubit icons, wireframe reveal)
+::  Both are rendered one after the other, each to its own folder.
+::  The edit (crossfade around frame 100-120) is done later in comp.
 ::
-::  Example:  START_FRAME=1  /  END_FRAME=250  renders frames 1-250
+::  RENDER_ROOT  — where the frame folders are created.
+::                 The _v02 folders keep the earlier renders untouched.
+::  SKIP_EXISTING=1 skips frames whose .exr already exists, so you
+::                 can stop the script and re-run it to resume.
 :: ================================================================
 
-set /a START_FRAME=40
-set /a END_FRAME=74
+set "RENDER_ROOT=%~dp0..\..\08_renders\Final_draft"
+
+set "SCENE_A=Scene"
+set /a A_START=1
+set /a A_END=177
+set "A_OUT=sh_02_tweezers_v02\SH_02_tweezers_"
+
+set "SCENE_B=Scene.001"
+set /a B_START=75
+set /a B_END=250
+set "B_OUT=sh_02_logic_v02\SH_02_logic_space_"
+
+set /a SKIP_EXISTING=1
 
 :: ================================================================
 ::  STEP 3 — SAFETY SETTINGS (OPTIONAL)               <-- EDIT THIS
@@ -159,19 +175,45 @@ echo ================================================================ >> "%LOG_F
 echo  SESSION STARTED: %date%  %time%                               >> "%LOG_FILE%"
 echo  Blender:    %BLENDER_EXE%                                     >> "%LOG_FILE%"
 echo  Blend file: %BLEND_FILE%                                      >> "%LOG_FILE%"
-echo  Frames:     %START_FRAME% to %END_FRAME%                      >> "%LOG_FILE%"
+echo  Scenes:     %SCENE_A% %A_START%-%A_END%  then  %SCENE_B% %B_START%-%B_END% >> "%LOG_FILE%"
 echo  Batch size: %BATCH_SIZE%  ^|  Cooldown: %COOLDOWN_SEC%s       >> "%LOG_FILE%"
 echo ================================================================ >> "%LOG_FILE%"
 
 
 :: ================================================================
-::  RENDER LOOP
+::  RENDER BOTH SCENES
 :: ================================================================
-set /a TOTAL_FRAMES=END_FRAME-START_FRAME+1
+call :render_scene "%SCENE_A%" %A_START% %A_END% "%A_OUT%"
+if errorlevel 1 exit /b 1
+call :render_scene "%SCENE_B%" %B_START% %B_END% "%B_OUT%"
+if errorlevel 1 exit /b 1
 
 echo.
 echo  ================================================================
-echo   BLENDER SAFE RENDER  —  %BLEND_NAME%
+echo   ALL SCENES COMPLETE  —  %BLEND_NAME%
+echo   Atomic layer : %RENDER_ROOT%\%A_OUT%####.exr
+echo   Logic layer  : %RENDER_ROOT%\%B_OUT%####.exr
+echo  ================================================================
+echo [%time%]  ALL SCENES COMPLETE >> "%LOG_FILE%"
+title Render Complete  ^|  both scenes
+pause
+exit /b 0
+
+
+:: ================================================================
+::  SUBROUTINE: render_scene  "SceneName" START END "out\prefix_"
+:: ================================================================
+:render_scene
+set "SCENE=%~1"
+set /a START_FRAME=%2
+set /a END_FRAME=%3
+set "OUT_PREFIX=%RENDER_ROOT%\%~4"
+set /a TOTAL_FRAMES=END_FRAME-START_FRAME+1
+echo ---- SCENE %SCENE%  frames %START_FRAME%-%END_FRAME%  ->  %OUT_PREFIX%####.exr >> "%LOG_FILE%"
+
+echo.
+echo  ================================================================
+echo   BLENDER SAFE RENDER  —  %BLEND_NAME%  [%SCENE%]
 echo   %date%  %time%
 echo   Frames : %START_FRAME% - %END_FRAME%  ^(%TOTAL_FRAMES% frames total^)
 echo   Batch  : %BATCH_SIZE% frames  /  Cooldown: %COOLDOWN_SEC%s between batches
@@ -189,15 +231,27 @@ set /a AVG_D=0
 :render_loop
 if %CURRENT% gtr %END_FRAME% goto done
 
+:: ---- Resume support: skip frames already on disk ----
+set "PAD=000%CURRENT%"
+set "PAD=!PAD:~-4!"
+if %SKIP_EXISTING% equ 1 if exist "%OUT_PREFIX%!PAD!.exr" (
+    echo [%time%]  [%SCENE%] frame %CURRENT% exists — skipped
+    set /a CURRENT+=1
+    goto render_loop
+)
+
 :: ---- Capture start time ----
 call :get_cs T_START
 
 :: ---- Render single frame ----
-title [Rendering] Frame %CURRENT% / %END_FRAME%  ^|  Avg: !AVG_S!.!AVG_D!s/frame
-echo [%time%]  Rendering frame %CURRENT% / %END_FRAME% ...
-echo [%time%]  Rendering frame %CURRENT% ... >> "%LOG_FILE%"
+title [%SCENE%] Frame %CURRENT% / %END_FRAME%  ^|  Avg: !AVG_S!.!AVG_D!s/frame
+echo [%time%]  [%SCENE%] Rendering frame %CURRENT% / %END_FRAME% ...
+echo [%time%]  [%SCENE%] Rendering frame %CURRENT% ... >> "%LOG_FILE%"
 
-"%BLENDER_EXE%" -b "%BLEND_FILE%" -f %CURRENT%
+:: --factory-startup: no user add-ons in the render (they error on load / every frame)
+:: render_gpu_setup.py: re-enables OptiX, which factory startup resets to CPU
+:: -S picks the scene, -o sends frames to the _v02 folder (format stays EXR from the scene)
+"%BLENDER_EXE%" -b --factory-startup "%BLEND_FILE%" -S "%SCENE%" --python "%~dp0render_gpu_setup.py" -o "%OUT_PREFIX%####" -f %CURRENT%
 
 if errorlevel 1 (
     echo.
@@ -294,7 +348,7 @@ set /a TOTAL_R=TOTAL_S%%60
 
 echo.
 echo  ================================================================
-echo   RENDER COMPLETE  —  %BLEND_NAME%
+echo   SCENE COMPLETE  —  %BLEND_NAME%  [%SCENE%]
 echo   %date%  %time%
 echo   ----------------------------------------------------------------
 echo   Frames rendered    :  !FRAMES_DONE!  ^(%START_FRAME% - %END_FRAME%^)
@@ -304,12 +358,10 @@ echo   *** AVG TIME / FRAME:  !AVG_S!.!AVG_D! sec / frame ***
 echo.
 echo  ================================================================
 echo.
-echo [%time%]  RENDER COMPLETE — !FRAMES_DONE! frames done. Avg !AVG_S!.!AVG_D!s/frame. Total render time !TOTAL_H!h!TOTAL_M!m!TOTAL_R!s. >> "%LOG_FILE%"
+echo [%time%]  [%SCENE%] SCENE COMPLETE — !FRAMES_DONE! frames done. Avg !AVG_S!.!AVG_D!s/frame. Total render time !TOTAL_H!h!TOTAL_M!m!TOTAL_R!s. >> "%LOG_FILE%"
 echo ================================================================ >> "%LOG_FILE%"
 echo. >> "%LOG_FILE%"
 
-title Render Complete  ^|  !FRAMES_DONE! frames  ^|  Avg !AVG_S!.!AVG_D!s/frame
-pause
 exit /b 0
 
 
