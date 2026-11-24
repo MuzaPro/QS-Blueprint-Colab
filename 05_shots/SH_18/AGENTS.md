@@ -5,7 +5,7 @@ Last updated: 2026-11-24. Read this before touching any SH_18 .blend or script. 
 ## The shot
 
 - **What it shows:** the architecture intro of the client's photonic quantum computer, drawn as a blueprint-style chip layout. From left to right:
-  - 01 single-photon generators (`Plane.003`, glass cylinders `Cylinder.001`)
+  - 01 single-photon generators (`Plane.003`, glass cylinders `Cylinder.001`, cut to 3 cells by the user on Nov 24: one array column removed, one guide re-routed to start in a cell)
   - 02 entangling unit cells (`entangling-cells-wafer`, renamed from `Plane.002` by the user on Nov 24; 12 glass cavities `optic-fiber-cavity` in a 4 × 3 array, renamed from `Cylinder`)
   - 03 single-photon detectors (SNSPDs, the four `snspd*` objects)
   - 04 classical processor (`Plane`)
@@ -26,13 +26,16 @@ Record here what the user explains about the science, so the animation stays tru
 - **Unit cells:** each one is an optical cavity, shown as a glass cylinder (`optic-fiber-cavity`) with a glowing diagram circle under it. A cell "turns on" while a photon is in it. Shot 15 shows the same unit cells up close (`04_assets/props/unit_cell_v7.blend`, linked into SH_15). *(inferred from SH_15 object names: the cell holds a trapped atom (`atom`, `tweezers`) that the photon entangles with, and the cavity has a mirror below. Ask before relying on this.)*
 - **Router (user, Nov 24):** it steers photons between the sections. In reality it's built into the printed silicon wafer, just like the waveguides and some of the unit cells. It should convey **complexity: the great number of possible paths** a photon could take. The scene's photons deliberately use only a few paths for a clear left→right motion. The v13 design is a programmable Mach–Zehnder interferometer mesh, which is how real photonic routers switch any input to any output; that part is agent knowledge, so check with the user before over-claiming.
 - **Aesthetic the user likes:** "simple but complex", elegant data-vis graphic design (`ref/feeling-of-elegant-complexity.jpg`). Router style refs: `ref/router-material-style-inspiration.jpg` and `ref/router-material-style-inspiration2.jpg` (#2 is the favourite): frosted translucent layers, dark orthogonal structures blurred at different depths, pale cool palette.
+- **Qubits and gates (user, Nov 24):** the photons are the qubits of this quantum computer. The atoms in the entangling unit cells are used to create entanglement gates.
+- **Delay lines (user, Nov 24):** the system has long spools of optical fibre, off the wafer and several km long. A photon can be sent down a spool so that it gets entangled with the **next clock cycle** of photons, which makes cluster generation more efficient. The client asked to show photons going down these lines every now and then.
 - **The logic card** above the chip shows the computation that runs on this architecture. Its logic reads left to right, the same direction as the hardware flow.
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `sh_18_architecture_intro_13.blend` | **Current.** v12 + photonic router wafer material (router renamed) |
+| `sh_18_architecture_intro_14.blend` | **Current / final.** User's v13 edit + waveguide fixes + delay-line photons, glows re-baked. Frames 2744–3278, output `//Render/sh_18_architecture_v14/` |
+| `sh_18_architecture_intro_13.blend` | v12 + photonic router wafer material (router renamed). Then hand-edited by the user (Nov 24, 14:37): 3 generator cells, re-routed guide |
 | `sh_18_architecture_intro_12.blend` | v11 + unit-cell switch-on glow + glass cavity lighting |
 | `sh_18_architecture_intro_11.blend` | v10 + feathered logic-card reveal. Then hand-edited by the user (Nov 24, 13:35): added the 12 `glowing-diagram-circle*` planes, renamed the wafer and cavities, and added duplicates `Card 18 Compute-B.001` and `08b_Card_Architecture-simplified_still_v3_4K.001/.002` |
 | `sh_18_architecture_intro_10.blend` | v09 + irregular photon spacing + SNSPD click glow |
@@ -44,11 +47,14 @@ Record here what the user explains about the science, so the animation stays tru
 | `sh18_v12_cells_glass_build.py` | Builds v12 from v11. With `-- rebake` it only re-bakes the unit-cell glow in v12+ |
 | `sh18_router_layout_gen.py` | Plain Python (Pillow + numpy). Writes the router layout textures to `tex/router_*.png` |
 | `sh18_v13_router_build.py` | Builds v13 from v12 (router material + rename) |
+| `sh18_v14_delaylines_build.py` | Builds v14 from v13. Afterwards run both `-- rebake` scripts on v14 (see its docstring), then `sh18_v14_delay_density.py` |
+| `sh18_v14_delay_density.py` | Edits v14 in place: dense random delay-line photons (only touches `DelayLine_*`) |
+| `Sh_18_v14_render_script.bat` | **Final render script.** v14, frames 2744–3278, with resume (skips frames whose EXR exists). Tested Nov 24: frame 2744 took 14.2 s and is already rendered |
 | `tex/` | Router layout textures, referenced relatively (`//tex/...`), **not packed**. Keep them next to the .blend |
 | `ref/` | User's style references for this shot |
 | `sh18_slide_variants_build.py`, `sh18_slide_feather.py` | Slide stills (see their docstrings) |
-| `Sh_18_render_script.bat` | Frame-by-frame render loop with cooldowns. **Still set to `_08.blend`, frames 2867–3278.** Update `BLEND_NAME` (and the range, see below) before a final render |
-| `Render/` | Playblasts. Frame output goes to `//Render/sh_18_architecture/sh_18_architecture####` |
+| `Sh_18_render_script.bat` | Old render loop, set to `_08.blend`. Superseded by `Sh_18_v14_render_script.bat` |
+| `Render/` | Playblasts. `Render/sh_18_architecture/` = old v08 frames. **Final v14 frames go to `Render/sh_18_architecture_v14/sh_18_architecture_v14_####.exr`** |
 
 Convention so far: each change round is saved as a **new version number** by a build script run on the previous version, so every step can be reproduced or rolled back. The `.blend1` files are Blender autosave backups.
 
@@ -65,7 +71,8 @@ Convention so far: each change round is saved as a **new version number** by a b
 
 ## Scene facts
 
-- **Frames:** scene range is **2868–3278** at 25 fps. The playblasts and earlier renders started earlier (2744 / 2807). The logic-card reveal happens at **2806–2858**, so the final render range must start ≤ ~2806 to include it. Ask the user which range is delivered.
+- **Frames:** the delivery range is **2744–3278** at 25 fps (user, Nov 24). It covers the chip fly-ins and the logic-card reveal (2806–2858). Scene range was set to match in v14.
+- **Render settings (in the .blend):** 1920×1080 at 100 %, Cycles 64 samples adaptive (0.01), time limit 20 s, OIDN, motion blur on (shutter 0.5), EXR 32-bit. The bat runs `blender -b file -f N` **without** `--factory-startup`, so GPU and OptiX come from the user's preferences.
 - **Cameras** are switched by timeline markers:
   - `F_2722` → `Dolly_Camera` (low angle, rig `Dolly_Rig`)
   - `F_2979` → `Camera.001` (parented to the animated empty `CAM_middle`)
@@ -111,7 +118,8 @@ Convention so far: each change round is saved as a **new version number** by a b
 - **Shader:** material `snspd-nano-wire` (the meander wire on all four `snspd*` objects, which share mesh `Plane.019`) gets emission from an **Object-type Attribute node `snspd_glow`**. That's a custom property on each snspd object, so each detector glows on its own. Emission colour is the photon cyan. Strength = `snspd_glow` × 1.4 (node `SNSPD_glow_strength`).
 - **Keys:** `snspd_glow` is keyframed per frame with a 1-frame rise at each photon arrival and an exponential decay (tau 2.2 frames, visible ~6 frames). The user asked for a *momentary, subtle* glow, and longer decays made several detectors glow at once.
 - **The keys are baked, not live.** After changing seeds, gaps, count or photon speed, re-run:
-  `blender --factory-startup -b sh_18_architecture_intro_11.blend --python sh18_v10_photons_snspd_build.py -- rebake`
+  `blender --factory-startup -b sh_18_architecture_intro_14.blend --python sh18_v10_photons_snspd_build.py -- rebake`
+  and the cell glow: `... --python sh18_v12_cells_glass_build.py -- rebake`
   (it re-saves the file it opened). Arrival = when the photon reaches curve factor 0.99, which is where it drops into the detector.
 
 ## Logic card reveal (changed in v11)
@@ -174,6 +182,42 @@ Convention so far: each change round is saved as a **new version number** by a b
 - **Why it's bold:** in the frontal camera (3070+) the router is only about 900 px wide (~23 px/m), so fine lanes average out. The readable rhythm comes from the dark per-column bands and the block/XBAR alternation. In the low Dolly shot it's in the defocused foreground, so only big shapes survive there too. A first pass with thin lines and active_glow 0.6 read as a flat grey bar with three cyan stripes.
 - **To change the design:** edit the generator, re-run it, and re-render. The .blend picks up the PNGs (reload images if the file is open).
 
+## Waveguide fixes and delay lines (v14)
+
+- **User edit in v13:** the generator chip has 3 cells now (`Cylinder.001` keeps only its row Array, count 3). One guide was re-routed so it starts in a cell. Photon timing at the detectors didn't change, because arrival = reaching 99 % of the curve, which is independent of length. The cell glows shifted by about 1–4 frames, and both glows were re-baked.
+- **Darker guide:** `Curve_Waveguide.001`'s tube used `Glass_Mat` (Principled transmission, volume density 5.6, empty image on base colour, viewport colour 0.52). It's switched to `Photon_Glass` like the others. The target-less `Hook-Curve_Parent_01` modifiers on `.001` and `.004` are deleted. The 3 active guides were added to `GlassEnv_receivers`.
+- **`end fade`:** a new input on the node group "Curve waveguide fixed", in curve-factor units (0 = off, the default, used by the main guides). Photons scale from 0 to full over that length at both ends of the curve (node `EF_scale`, Scale Instances after Delete Geometry). The photon shader reads `fade` (= instance scale), so they fade as well as shrink.
+- **Delay-line guides:** `DelayLine_Outer / _Middle / _Inner` (collection `DelayLines`). They're copies of `Curve_Waveguide.002`'s modifier setup with their own POLY curves. Each follows one nested U of the sketch's "DELAY LINES" drawing; coordinates were measured from the 4K texture:
+
+  | Loop | Right x | Left x | Bottom y |
+  |---|---|---|---|
+  | Outer | −6.91 | −14.24 | −13.08 |
+  | Middle | −8.02 | −13.13 | −11.97 |
+  | Inner | −9.13 | −12.02 | −10.85 |
+
+  - Spool circles: centres x −10.06 / −10.58 / −11.10, radius 0.43, on each U's bottom.
+  - Path: start inside the entangling wafer (y 0.9) on the right → down → one full turn around each of the 3 spool circles (right to left) → left → up → end inside the wafer.
+  - Photons fade over 1 m at each end. No tube is drawn, because the group's tube only exists inside `Guides_Boolean` (generator chip).
+- **Delay density (changed later on Nov 24, in place in v14, no new version):** the user wanted many more photons, always 2–3 or more somewhere on the loops. Nobody will notice that they appear from and vanish into the wafer, as long as the paths start and end in the entangling area. `sh18_v14_delay_density.py` rewrites only the `DelayLine_*` modifiers and keys; the main guides and glow bakes are untouched:
+  - random spacing (randomness 1)
+  - mean interval 48 frames, min 14, max 110 (converted to curve factor via traversal time)
+  - seeds 101 / 202 / 303
+  - 24 photons per loop
+  - linear movement from frame 2560, so the loops are already busy at 2744
+
+  Result over 2744–3278: **2–7 photons on the loops at every frame, mean 4.3** (the script prints the histogram). **The table below is superseded.**
+- **Delay timing (original v14 build, superseded):** explicit and deterministic. Linear `movement progression` keys (0→1 over length / 0.6 m/frame, linear extrapolation). `spacing randomness` 0 with gap = interval / traversal.
+
+  | Loop | Photons enter at | Traversal | Photons |
+  |---|---|---|---|
+  | Outer | 2850, 3020, 3190 | 72 f | 3 |
+  | Middle | 2905, 3075, 3245 | 65 f | 3 |
+  | Inner | 2960, 3130 | 57 f | 2 |
+
+  Edit `DELAY` in the build script to change these.
+- **Delay photons are not part of the glow bakes.** They don't reach cells or detectors, and the bake scripts list only the 3 main guides. They're the same size as main photons, so they're tiny in the wide view and read best in the frontal camera.
+- **Known leftover:** the architecture texture under the generator chip still shows 8 drawn circles, even though the model now has 3 cells.
+
 ## Test render recipe
 
 ```python
@@ -195,3 +239,6 @@ Write test output to the scratchpad or `08_renders/stills/sh18_v1x_tests/`, neve
 - **2026-11-24 (v11, user):** added the glowing-diagram circles under the cells; renamed `Plane.002` → `entangling-cells-wafer` and `Cylinder` → `optic-fiber-cavity`.
 - **2026-11-24 (v12):** cell circles and teal cell lights driven by photon proximity; glass volume density 3.43 → 0.4; shot-15 HDRI reflection sphere, light-linked to the glass only.
 - **2026-11-24 (v13):** router `Plane.004` → `photonic-router-wafer`, with a layered MZI-mesh wafer material that replaces the brick placeholder.
+- **2026-11-24 (v13, user):** generator cut to 3 cells; one guide re-routed.
+- **2026-11-24 (v14):** `.001` tube → `Photon_Glass`; dead hooks removed; `end fade` added to the guide group; 3 delay-line loop guides; both glows re-baked; range 2744–3278 with a new output folder; `Sh_18_v14_render_script.bat`.
+- **2026-11-24 (v14, in place):** denser delay-line traffic (random spacing, mean 48 f per loop, 2–7 photons on screen) via `sh18_v14_delay_density.py`.
