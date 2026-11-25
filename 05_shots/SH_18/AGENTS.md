@@ -1,6 +1,6 @@
 # SH_18: notes for agents
 
-Last updated: 2026-11-24. Read this before touching any SH_18 .blend or script. **Keep it updated**: when you change the scene, add what you did, why, and how to undo or re-tune it.
+Last updated: 2026-11-25. For the film's story, science and this shot's role in it, read the [project guide](../../AGENTS.md) first. Read this before touching any SH_18 .blend or script. **Keep it updated**: when you change the scene, add what you did, why, and how to undo or re-tune it.
 
 ## The shot
 
@@ -12,7 +12,7 @@ Last updated: 2026-11-24. Read this before touching any SH_18 .blend or script. 
   - Below them sit the router (`photonic-router-wafer`, renamed from `Plane.004` in v13) and delay lines (drawn in the sketch texture).
 
   Above all of that floats the **logic card** (`Card 18 Compute-B`, with a video texture showing a left-to-right logic/circuit animation) on its dark backing plate `Card_bg`.
-- Photons (cyan comets) run from the generators through the unit cells to the detectors along waveguide curves.
+- Photons (cyan comets) run along waveguide curves from the generators, by way of the unit cells (where they enter the cavities; see Meaning below), to the detectors.
 - **Colour rule:** cyan/teal = the client's photonic tech (photons, nanowire glow, card edge). Don't introduce competitor-style red lasers here; SH_1 is the competitor shot.
 - **This is one of the most important shots in the film.** It's being polished for final post and delivery. The user gives tweaks one at a time, so iterate and verify each with renders.
 
@@ -23,12 +23,13 @@ Record here what the user explains about the science, so the animation stays tru
 - **The story:** single photons are generated, travel along waveguides, and **take turns visiting the entangling unit cells**. They're then counted by single-photon detectors, and a classical processor reads the results out. The shot should read as **"a well-oiled machine"**: one photon at a time, each cell switching on in turn, left to right.
 - **Detectors** are **superconducting nanowire single-photon detectors (SNSPDs)**. The meander on each `snspd*` object is the nanowire. Absorbing a photon breaks superconductivity locally (a "hotspot"), which produces a click, and the wire then recovers. That's why the glow is a fast rise followed by a short decay.
 - **Photon timing:** single-photon sources emit at random times, so irregular (Poisson-like) spacing between photons is physically right as well as more readable than a uniform stream.
-- **Unit cells:** each one is an optical cavity, shown as a glass cylinder (`optic-fiber-cavity`) with a glowing diagram circle under it. A cell "turns on" while a photon is in it. Shot 15 shows the same unit cells up close (`04_assets/props/unit_cell_v7.blend`, linked into SH_15). *(inferred from SH_15 object names: the cell holds a trapped atom (`atom`, `tweezers`) that the photon entangles with, and the cavity has a mirror below. Ask before relying on this.)*
+- **Unit cells:** each one is an optical cavity, shown as a glass cylinder (`optic-fiber-cavity`) with a glowing diagram circle under it. A cell "turns on" while a photon is in it. Photons don't pass through the cell: they **enter the cavity in the shape of the photonic mode** (user, Nov 25). Shot 15 shows exactly that, plus the dual rail; here the timed circles' glow implies it, and the dual rail is left out for simplicity. Shot 15 shows the same unit cells up close (`04_assets/props/unit_cell_v7.blend`, linked into SH_15). *(inferred from SH_15 object names: the cell holds a trapped atom (`atom`, `tweezers`) that the photon entangles with, and the cavity has a mirror below. Ask before relying on this.)*
 - **Router (user, Nov 24):** it steers photons between the sections. In reality it's built into the printed silicon wafer, just like the waveguides and some of the unit cells. It should convey **complexity: the great number of possible paths** a photon could take. The scene's photons deliberately use only a few paths for a clear left→right motion. The v13 design is a programmable Mach–Zehnder interferometer mesh, which is how real photonic routers switch any input to any output; that part is agent knowledge, so check with the user before over-claiming.
 - **Aesthetic the user likes:** "simple but complex", elegant data-vis graphic design (`ref/feeling-of-elegant-complexity.jpg`). Router style refs: `ref/router-material-style-inspiration.jpg` and `ref/router-material-style-inspiration2.jpg` (#2 is the favourite): frosted translucent layers, dark orthogonal structures blurred at different depths, pale cool palette.
 - **Qubits and gates (user, Nov 24):** the photons are the qubits of this quantum computer. The atoms in the entangling unit cells are used to create entanglement gates.
 - **Delay lines (user, Nov 24):** the system has long spools of optical fibre, off the wafer and several km long. A photon can be sent down a spool so that it gets entangled with the **next clock cycle** of photons, which makes cluster generation more efficient. The client asked to show photons going down these lines every now and then.
-- **The logic card** above the chip shows the computation that runs on this architecture. Its logic reads left to right, the same direction as the hardware flow.
+- **The logic card** above the chip shows the computation that runs on this architecture. Its logic reads left to right, the same direction as the hardware flow: photons, then the cluster state, then a **vertical line that represents the "reading" by the single-photon detectors**, then 0s and 1s with errors in red (confirmed by the user, Nov 25).
+- **Layout choices (user, Nov 25):** the generators are a separate station for visual clarity, as a simplified linear process. There are four cells per row for an easy logical connection to the simple cluster of four atoms and one photon; keep that.
 
 ## Files
 
@@ -49,12 +50,12 @@ Record here what the user explains about the science, so the animation stays tru
 | `sh18_v13_router_build.py` | Builds v13 from v12 (router material + rename) |
 | `sh18_v14_delaylines_build.py` | Builds v14 from v13. Afterwards run both `-- rebake` scripts on v14 (see its docstring), then `sh18_v14_delay_density.py` |
 | `sh18_v14_delay_density.py` | Edits v14 in place: dense random delay-line photons (only touches `DelayLine_*`) |
-| `Sh_18_v14_render_script.bat` | **Final render script.** v14, frames 2744–3278, with resume (skips frames whose EXR exists). Tested Nov 24: frame 2744 took 14.2 s and is already rendered |
+| `Sh_18_v14_render_script.bat` | **Final render script.** v14, frames 2744–3278. Output `Render/sh_18_architecture_v14/` (the .blend's path, also forced with `-o`); **the user wants renders and playblasts in this one folder, with renders overwriting playblasts**. `RESUME=1` skips only real renders: an EXR whose header contains Cycles' `RenderTime` stamp (viewport playblasts lack it, so they get overwritten). `FRAME_LIST` (e.g. `2900 2950-2975`) renders only those frames, for re-render passes; pair with `RESUME=0` to overwrite. Full-res frames take ~33–41 s |
 | `tex/` | Router layout textures, referenced relatively (`//tex/...`), **not packed**. Keep them next to the .blend |
 | `ref/` | User's style references for this shot |
 | `sh18_slide_variants_build.py`, `sh18_slide_feather.py` | Slide stills (see their docstrings) |
 | `Sh_18_render_script.bat` | Old render loop, set to `_08.blend`. Superseded by `Sh_18_v14_render_script.bat` |
-| `Render/` | Playblasts. `Render/sh_18_architecture/` = old v08 frames. **Final v14 frames go to `Render/sh_18_architecture_v14/sh_18_architecture_v14_####.exr`** |
+| `Render/` | `Render/sh_18_architecture/` = old v08 frames. **Final v14 frames and playblasts both live in `Render/sh_18_architecture_v14/sh_18_architecture_v14_####.exr`** (keep it that way; don't split folders). Frame 2744 there predates the delay-density change; re-render it in the second pass |
 
 Convention so far: each change round is saved as a **new version number** by a build script run on the previous version, so every step can be reproduced or rolled back. The `.blend1` files are Blender autosave backups.
 
@@ -72,7 +73,7 @@ Convention so far: each change round is saved as a **new version number** by a b
 ## Scene facts
 
 - **Frames:** the delivery range is **2744–3278** at 25 fps (user, Nov 24). It covers the chip fly-ins and the logic-card reveal (2806–2858). Scene range was set to match in v14.
-- **Render settings (in the .blend):** 1920×1080 at 100 %, Cycles 64 samples adaptive (0.01), time limit 20 s, OIDN, motion blur on (shutter 0.5), EXR 32-bit. The bat runs `blender -b file -f N` **without** `--factory-startup`, so GPU and OptiX come from the user's preferences.
+- **Render settings (in the .blend):** 1920×1080 at 100 %, Cycles 64 samples adaptive (0.01), time limit 47 s (Nov 25), OIDN, motion blur on (shutter 0.5), EXR 32-bit. The bat runs `blender -b file -f N` **without** `--factory-startup`, so GPU and OptiX come from the user's preferences.
 - **Cameras** are switched by timeline markers:
   - `F_2722` → `Dolly_Camera` (low angle, rig `Dolly_Rig`)
   - `F_2979` → `Camera.001` (parented to the animated empty `CAM_middle`)
@@ -242,3 +243,6 @@ Write test output to the scratchpad or `08_renders/stills/sh18_v1x_tests/`, neve
 - **2026-11-24 (v13, user):** generator cut to 3 cells; one guide re-routed.
 - **2026-11-24 (v14):** `.001` tube → `Photon_Glass`; dead hooks removed; `end fade` added to the guide group; 3 delay-line loop guides; both glows re-baked; range 2744–3278 with a new output folder; `Sh_18_v14_render_script.bat`.
 - **2026-11-24 (v14, in place):** denser delay-line traffic (random spacing, mean 48 f per loop, 2–7 photons on screen) via `sh18_v14_delay_density.py`.
+- **2026-11-24 (render):** a viewport playblast (2875–3278) overwrote the same output path, so resume thought the job was done. Splitting them into separate folders was rejected by the user, so everything is back in `Render/sh_18_architecture_v14/`. Resume now skips only EXRs with a `RenderTime` header stamp, so renders overwrite playblasts. The bat also gained a `FRAME_LIST` for re-render passes.
+- **2026-11-24 (render, full pass):** bat set to the whole range 2744–3278 with `FRAME_LIST` empty and `RESUME=0`, for the user's high-quality overnight render (overwrites every existing EXR). If it stops partway, move `START_FRAME` to the next unfinished frame; `RESUME=1` would skip older-quality frames. It replaces the 2744–2875 pass, which the user stopped after 2809. The user raised the Cycles time limit to 90 s/frame in the .blend (was 20).
+- **2026-11-25 (render, resumed):** the overnight pass stopped at about 00:30 when Windows Update restarted the PC (not a power cut). Frames 2744–2787 are done at 256 samples (90 s limit). Frames 2788–2813 followed on Nov 25, also at 256. The user then saved the .blend with 64 samples and a 47 s limit (10:16): **a deliberate choice, confirmed by the user; don't raise it back**. 2814–2878 were rendered that way on Nov 25; the script was stopped at about 11:03 (no crash logged). The bat is now `START_FRAME=2879`, batch 6, cooldown 60 s, `FRAME_LIST` empty, `RESUME=0`: **keep `RESUME=0`**, because the files at 2879+ are older renders or playblasts and older renders would count as done. If it stops again, move `START_FRAME` to the next unfinished frame (see the render log). Restore `START_FRAME=2744` and `RESUME=1` afterwards. **Keep the .bat CRLF and plain ASCII**: it was LF with em dashes, which made cmd lose the `get_cs` label in a test copy and fail outright under code page 65001. Converted Nov 25. Don't edit a .bat while it runs.

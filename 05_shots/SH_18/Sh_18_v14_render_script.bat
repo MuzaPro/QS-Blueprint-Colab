@@ -2,13 +2,14 @@
 setlocal enabledelayedexpansion
 
 :: ================================================================
-::  BLENDER SAFE RENDER  —  TEMPLATE
+::  BLENDER SAFE RENDER  -  TEMPLATE
 ::  GPU overheating protection with live avg sec/frame display.
 :: ================================================================
 ::
 ::  SH_18 FINAL (v14): sh_18_architecture_intro_14.blend, frames 2744-3278.
-::  Output (set inside the .blend):
+::  Output (same as the .blend's path, also forced with -o):
 ::    Render\sh_18_architecture_v14\sh_18_architecture_v14_####.exr
+::  Playblast frames in that folder are overwritten; real renders are skipped.
 ::  RESUME=1 skips frames whose EXR already exists, so you can stop the
 ::  window and double-click again to continue. Delete a frame's EXR (or
 ::  set RESUME=0) to re-render it.
@@ -35,7 +36,7 @@ setlocal enabledelayedexpansion
 
 
 :: ================================================================
-::  STEP 1 — YOUR BLEND FILE                          <-- EDIT THIS
+::  STEP 1 - YOUR BLEND FILE                          <-- EDIT THIS
 :: ----------------------------------------------------------------
 ::  Type the name of your .blend file below (just the filename,
 ::  not the full path). This .bat file must be in the same folder.
@@ -47,7 +48,7 @@ set "BLEND_NAME=sh_18_architecture_intro_14.blend"
 
 
 :: ================================================================
-::  STEP 2 — FRAME RANGE                              <-- EDIT THIS
+::  STEP 2 - FRAME RANGE                              <-- EDIT THIS
 :: ----------------------------------------------------------------
 ::  Set the first and last frame you want to render.
 ::  You can find these numbers in Blender's Timeline or
@@ -56,27 +57,44 @@ set "BLEND_NAME=sh_18_architecture_intro_14.blend"
 ::  Example:  START_FRAME=1  /  END_FRAME=250  renders frames 1-250
 :: ================================================================
 
-set /a START_FRAME=2744
+set /a START_FRAME=2879
 set /a END_FRAME=3278
 
 
 :: ================================================================
-::  STEP 3 — SAFETY SETTINGS (OPTIONAL)               <-- EDIT THIS
+::  STEP 3 - SAFETY SETTINGS (OPTIONAL)               <-- EDIT THIS
 :: ----------------------------------------------------------------
-::  BATCH_SIZE   — Number of frames rendered before each break.
+::  BATCH_SIZE   - Number of frames rendered before each break.
 ::                 Lower = more breaks = cooler GPU.
 ::                 Recommended: 5 (default). Use 2-3 for heavy scenes.
 ::
-::  COOLDOWN_SEC — How many seconds to wait between batches.
+::  COOLDOWN_SEC - How many seconds to wait between batches.
 ::                 Recommended: 120 (2 minutes).
 ::                 Increase to 180-300 if your GPU runs very hot.
 :: ================================================================
 
-set /a BATCH_SIZE=2
+set /a BATCH_SIZE=6
 set /a COOLDOWN_SEC=60
 
-:: Resume: 1 = skip frames that already have an EXR in OUT_PREFIX, 0 = render all
-set /a RESUME=1
+:: ================================================================
+::  FRAME LIST (second pass / re-renders)                <-- EDIT THIS
+:: ----------------------------------------------------------------
+::  Leave empty to render the whole START_FRAME..END_FRAME range.
+::  Fill it to render ONLY these frames: single frames and ranges,
+::  separated by spaces. Example:
+::      set "FRAME_LIST=2900 2950-2975 3100 3200-3278"
+::  To OVERWRITE frames that already exist, also set RESUME=0 below
+::  (with RESUME=1 listed frames that already have an EXR are skipped).
+:: ================================================================
+set "FRAME_LIST="
+
+:: Resume: 1 = skip frames that already have a real render in OUT_PREFIX, 0 = render all
+:: (0 for the full high-quality pass: overwrite everything. If it stops partway,
+::  set START_FRAME above to the next unfinished frame and run again, still with 0.)
+set /a RESUME=0
+:: Output folder (passed to Blender with -o). Same folder as the .blend's own path, so
+:: renders overwrite viewport playblasts. Resume only skips REAL renders: an EXR counts
+:: as rendered only if its header has Cycles' "RenderTime" stamp (playblasts don't).
 set "OUT_PREFIX=%~dp0Render\sh_18_architecture_v14\sh_18_architecture_v14_"
 
 
@@ -181,9 +199,30 @@ echo ================================================================ >> "%LOG_F
 :: ================================================================
 set /a TOTAL_FRAMES=END_FRAME-START_FRAME+1
 
+:: ---- Expand FRAME_LIST ("2900 2950-2975") into " 2900 2950 2951 ... " ----
+set "LIST_EXP= "
+if defined FRAME_LIST (
+    set /a TOTAL_FRAMES=0
+    for %%t in (%FRAME_LIST%) do (
+        for /f "tokens=1,2 delims=-" %%a in ("%%t") do (
+            if "%%b"=="" (
+                set "LIST_EXP=!LIST_EXP!%%a "
+                set /a TOTAL_FRAMES+=1
+            ) else (
+                for /l %%f in (%%a,1,%%b) do (
+                    set "LIST_EXP=!LIST_EXP!%%f "
+                    set /a TOTAL_FRAMES+=1
+                )
+            )
+        )
+    )
+    echo [OK] Frame list: %FRAME_LIST%  ^(!TOTAL_FRAMES! frames^)
+    echo  Frame list: %FRAME_LIST% >> "%LOG_FILE%"
+)
+
 echo.
 echo  ================================================================
-echo   BLENDER SAFE RENDER  —  %BLEND_NAME%
+echo   BLENDER SAFE RENDER  -  %BLEND_NAME%
 echo   %date%  %time%
 echo   Frames : %START_FRAME% - %END_FRAME%  ^(%TOTAL_FRAMES% frames total^)
 echo   Batch  : %BATCH_SIZE% frames  /  Cooldown: %COOLDOWN_SEC%s between batches
@@ -201,11 +240,22 @@ set /a AVG_D=0
 :render_loop
 if %CURRENT% gtr %END_FRAME% goto done
 
-:: ---- Resume: skip frames already on disk ----
-if %RESUME% equ 1 if exist "%OUT_PREFIX%%CURRENT%.exr" (
-    echo [%time%]  Frame %CURRENT% already rendered - skipping.
+:: ---- Frame list: skip frames not in the list ----
+if defined FRAME_LIST if "!LIST_EXP: %CURRENT% =!"=="!LIST_EXP!" (
     set /a CURRENT+=1
     goto render_loop
+)
+
+:: ---- Resume: skip frames already on disk ----
+::      (a playblast EXR has no "RenderTime" in its header -> gets overwritten)
+if %RESUME% equ 1 if exist "%OUT_PREFIX%%CURRENT%.exr" (
+    findstr /m /c:"RenderTime" "%OUT_PREFIX%%CURRENT%.exr" >nul 2>&1
+    if !errorlevel! equ 0 (
+        echo [%time%]  Frame %CURRENT% already rendered - skipping.
+        set /a CURRENT+=1
+        goto render_loop
+    )
+    echo [%time%]  Frame %CURRENT% is a playblast - will be overwritten.
 )
 
 :: ---- Capture start time ----
@@ -216,18 +266,18 @@ title [Rendering] Frame %CURRENT% / %END_FRAME%  ^|  Avg: !AVG_S!.!AVG_D!s/frame
 echo [%time%]  Rendering frame %CURRENT% / %END_FRAME% ...
 echo [%time%]  Rendering frame %CURRENT% ... >> "%LOG_FILE%"
 
-"%BLENDER_EXE%" -b "%BLEND_FILE%" -f %CURRENT%
+"%BLENDER_EXE%" -b "%BLEND_FILE%" -o "%OUT_PREFIX%####" -f %CURRENT%
 
 if errorlevel 1 (
     echo.
     echo  ================================================================
     echo   [ERROR] Frame %CURRENT% failed to render.
     echo   Review the Blender output above for details.
-    echo   The script has stopped safely — no further frames will render.
+    echo   The script has stopped safely - no further frames will render.
     echo  ================================================================
-    echo [%time%] ERROR — Frame %CURRENT% FAILED. Script halted. >> "%LOG_FILE%"
+    echo [%time%] ERROR - Frame %CURRENT% FAILED. Script halted. >> "%LOG_FILE%"
     echo.
-    title [STOPPED] Error on frame %CURRENT% — check render_log.txt
+    title [STOPPED] Error on frame %CURRENT% - check render_log.txt
     pause
     exit /b 1
 )
@@ -254,7 +304,7 @@ echo   +-----------------------------------------+
 echo   ^|  AVG RENDER TIME: !AVG_S!.!AVG_D! sec / frame       ^|
 echo   +-----------------------------------------+
 echo.
-echo [%time%]  Frame %CURRENT% OK — !FRAME_S!.!FRAME_D!s  ^|  avg !AVG_S!.!AVG_D!s/frame  ^|  !FRAMES_DONE!/%TOTAL_FRAMES% done >> "%LOG_FILE%"
+echo [%time%]  Frame %CURRENT% OK - !FRAME_S!.!FRAME_D!s  ^|  avg !AVG_S!.!AVG_D!s/frame  ^|  !FRAMES_DONE!/%TOTAL_FRAMES% done >> "%LOG_FILE%"
 
 set /a IN_BATCH+=1
 set /a CURRENT+=1
@@ -313,7 +363,7 @@ set /a TOTAL_R=TOTAL_S%%60
 
 echo.
 echo  ================================================================
-echo   RENDER COMPLETE  —  %BLEND_NAME%
+echo   RENDER COMPLETE  -  %BLEND_NAME%
 echo   %date%  %time%
 echo   ----------------------------------------------------------------
 echo   Frames rendered    :  !FRAMES_DONE!  ^(%START_FRAME% - %END_FRAME%^)
@@ -323,7 +373,7 @@ echo   *** AVG TIME / FRAME:  !AVG_S!.!AVG_D! sec / frame ***
 echo.
 echo  ================================================================
 echo.
-echo [%time%]  RENDER COMPLETE — !FRAMES_DONE! frames done. Avg !AVG_S!.!AVG_D!s/frame. Total render time !TOTAL_H!h!TOTAL_M!m!TOTAL_R!s. >> "%LOG_FILE%"
+echo [%time%]  RENDER COMPLETE - !FRAMES_DONE! frames done. Avg !AVG_S!.!AVG_D!s/frame. Total render time !TOTAL_H!h!TOTAL_M!m!TOTAL_R!s. >> "%LOG_FILE%"
 echo ================================================================ >> "%LOG_FILE%"
 echo. >> "%LOG_FILE%"
 
@@ -335,7 +385,7 @@ exit /b 0
 :: ================================================================
 ::  SUBROUTINE: get_cs
 ::  Reads the system clock and converts it to centiseconds.
-::  (Used internally for per-frame timing — do not edit.)
+::  (Used internally for per-frame timing - do not edit.)
 :: ================================================================
 :get_cs
 set "_T=%time: =0%"
