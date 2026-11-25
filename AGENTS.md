@@ -89,7 +89,7 @@ The paper draws photons cyan and atoms dark blue in its lattice figures.
 | SH_1 | Not yet | [AGENTS.md](05_shots/SH_1/AGENTS.md) |
 | SH_02 | Not yet | [SH_02_CONTEXT_FOR_AGENTS.md](05_shots/SH_02/SH_02_CONTEXT_FOR_AGENTS.md), [SH_02_ANIMATOR_NOTES.md](05_shots/SH_02/SH_02_ANIMATOR_NOTES.md) |
 | SH_4, SH_7, SH_8, SH_9, SH_11, SH_12, SH_17 | Not yet | None |
-| SH_15 | Not yet. Known so far (user, Nov 25): it shows the photon entering the cavity in the shape of the photonic mode, and it shows the dual rail. It shows a vertical Fabry–Pérot cavity: the top is the edge of an optical fibre; the bottom, in reality another fibre edge, is a reflective round mirror for clarity. Horizontal laser tweezers (horizontal so viewers don't confuse them with the vertical photonic mode) hold the atom floating in space, then fade out by frame 185 in a way that implies they are still there but omitted to simplify the visuals | [AGENTS.md](05_shots/SH_15/AGENTS.md) |
+| SH_15 | Not yet. Known so far (user, Nov 25): it shows the photon entering the cavity in the shape of the photonic mode. The dual rail is only seen **from above**, in the wider view showing several cavities; the photon in the \|0⟩ rail is **not shown**, because that was the focus of the second Quantum Source movie. It shows a vertical Fabry–Pérot cavity: the top is the edge of an optical fibre; the bottom, in reality another fibre edge, is a reflective round mirror for clarity. Horizontal laser tweezers (horizontal so viewers don't confuse them with the vertical photonic mode) hold the atom floating in space, then fade out by frame 185 in a way that implies they are still there but omitted to simplify the visuals. The mode's lobes stay put while their intensity subtly moves up and down, implying the single photon resonating between the mirrors; that detail belongs only to the single-cell part | [AGENTS.md](05_shots/SH_15/AGENTS.md) |
 | **SH_18** | **Yes** | [AGENTS.md](05_shots/SH_18/AGENTS.md) |
 | SH_20 | Not yet | None |
 
@@ -149,7 +149,7 @@ Don't "fix" these. They're deliberate choices confirmed by the user, except wher
 - **Delay-line photons appear and vanish** inside the entangling wafer. They aren't connected to the main photon paths.
 - **Separate generator station:** in the paper, the same kind of unit cell generates, entangles and measures. Generators stand apart here for visual clarity, as a simplified linear process.
 - **The photon–cavity interaction is implied, not shown.** Photons don't pass through the cells: they enter the cavity in the shape of the photonic mode. SH_15 shows it; here the glow below each cell implies it. Never describe or animate it as a photon flying through a cell.
-- **One comet per photon:** the dual rail is left out for simplicity. SH_15 shows it.
+- **One comet per photon:** the dual rail is left out for simplicity. SH_15 shows it, only from above in its wider view of several cavities (user).
 - **Four cells per row:** chosen to connect easily to the simple cluster of **four atoms and one photon**. Keep rows of four.
 - **Detector cryogenics** aren't shown *(inferred)*.
 
