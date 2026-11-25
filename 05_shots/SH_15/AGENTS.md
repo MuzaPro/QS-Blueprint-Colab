@@ -42,8 +42,10 @@ Statements marked *(inferred)* are agent readings of the file. The user hasn't c
 | `sh15_v21_resonance_build.py` | Builds v21 from v20 (never writes v20). Same rule: don't re-run it over a hand-edited v21 |
 | `sh15_v22_atom_build.py` | Builds v22 from v21 (never writes v21). Don't re-run it over a hand-edited v22 |
 | [NOTES_FOR_HUMANS.md](NOTES_FOR_HUMANS.md) | The user's own guide to the controls (asked for on Nov 25). Plain language; keep its values in step with the .blend |
-| `Sh_15_render_script.bat` | Render loop. **Still points at `_18`, frames 213–850** (user's setting, untouched) |
-| `Render/sh_15_cavities/` | EXR output of the .blend. At the time of writing, these frames predate v19–v21. **The user plans to re-render everything in higher quality** (Nov 25) |
+| `Sh_15_v22_render_script.bat` | **Current render script** (Nov 25, based on SH_18's v14 bat). v22, frames 50–850, batch 4, cooldown 60 s, `RESUME=1` (skips finished EXRs; unlike SH_18's, it zero-pads the frame number, needed because the range starts at 0050). `FRAME_LIST` for re-render passes. Forces OptiX with `--cycles-device OPTIX`, because the Blender preferences were on CUDA on Nov 25; frames 160, 474 and 700 match within noise and OptiX takes 12–15 % less time. Stops if a frame's EXR is missing. Keep it CRLF and plain ASCII, and don't edit it while it runs |
+| `Sh_15_render_script.bat` | Old render loop. **Still points at `_18`, frames 213–850** (user's setting, untouched) |
+| `Render/sh_15_v22/` | **EXR output of v22** (`sh_15_v22_####.exr`), full re-render started on Nov 25 at 20:44. Progress: `sh_15_positioning_and_first_cluster_tile_22_render_log.txt` |
+| `Render/sh_15_cavities/` | EXR output of v18–v21, kept. At the time of writing, these frames predate v19–v21. **The user plans to re-render everything in higher quality** (Nov 25) |
 | `Render/sh_15_v21_resonance_preview_*.mp4` | Low-res Cycles previews of the resonance, 270–428 and 432–590 (every 2nd frame, at real speed). The first predates the depth change at 431, which doesn't affect it |
 | `Render/sh_15_v21_resonance_45f_preview_270-430.mp4` | **Current speed** (45 frames), every frame, low-res Cycles. The two above show the old 56-frame speed |
 | `Render/sh_15_v22_atom_preview_143-280.mp4`, `Render/sh_15_v22_atom_still_0220.png` | v22's atom: every frame at half size, and one full-size still at the shot's 45 s limit (took 20 s). `atom-card.jpg` is the user's render of the old atom |
@@ -52,7 +54,7 @@ Statements marked *(inferred)* are agent readings of the file. The user hasn't c
 
 ## Scene facts
 
-- **Blender 5.2.** Scene range 50–850, 25 fps, 1920×1080, Cycles 256 samples adaptive 0.01, 45 s limit, OIDN, 32-bit EXR, motion blur off, view transform Standard, no compositor. The colour grade happens outside Blender *(inferred: the user's screenshot is warmer/teal-graded compared to a raw render)*.
+- **Blender 5.2.** Scene range 50–850, 25 fps, 1920×1080, Cycles **128 samples** adaptive 0.01, **90 s limit** (user, Nov 25; up to v21: 256 and 45 s), OIDN, EXR 16-bit half DWAB (read from the file; an earlier note said 32-bit), motion blur off, view transform Standard, no compositor. The colour grade happens outside Blender *(inferred: the user's screenshot is warmer/teal-graded compared to a raw render)*.
 - **Cameras** are switched by timeline markers: `F_00` → `Camera.001` (rig `Armature`), `F_218` (at frame **228**, not 218) → `Camera`, `F_431` → `Camera.001`.
 - `unit-cell-Linked*` are instances of a collection **linked** from `04_assets/props/unit_cell_v7.blend` (glass fibre cavity `rails_pi_shape.001`, curved `mirror`). Edit them there.
 - **Cards 13 and 14:** `Card_13-14_v2` is now two objects (user, Nov 25): `Card_13_v2` (atom only, until 227) and its duplicate `Card_14_v2` (228–430; the photon arrives and is eventually entangled). Both play `Card_13-14_v2.mp4`; the graphics start around clip frame 160. `Card_14_v2` plays **40 frames later** (material `Card_14_v2`, image node: Start Frame 40; Card 13 has 0) so it fits the photon reaching the mode.
@@ -191,6 +193,7 @@ Not driven: `Card_13_v2`, `Card_14_v2` (both formerly `Card_13-14_v2`) and `Card
 
 ## Change log
 
+- **2026-11-25, v22 render:** on the user's request, set v22 to 128 samples, 90 s limit, 1920×1080 and output `//Render\sh_15_v22\sh_15_v22_`, edited in place. Nothing else was changed. `sh15_v22_atom_build.py` doesn't set these, so re-running it would lose them. Added `Sh_15_v22_render_script.bat` and started the full render, 50–850.
 - **2026-11-25, v22:** new hero atom: nucleus, S-orbital cloud and circle (see above). User feedback: "a very (simple) but interesting idea - to make the atom highly resemble its 2D representation"; they want to introduce the same atom in SH_02 first, so that SH_15 is easier to digest.
 - **2026-11-25, v21 card 14:** the user duplicated the card; its clip now starts 40 frames later, with its own image datablock (edited in place, still v21). It also no longer goes blank at 425.
 - **2026-11-25, notes only:** corrected the dual rail (seen only from above, with several cavities; no photon in the |0⟩ rail), from the user. Earlier notes said the shot simply shows it.
