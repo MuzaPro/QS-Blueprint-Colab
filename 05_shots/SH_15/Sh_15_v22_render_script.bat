@@ -154,7 +154,7 @@ if not exist "%BLENDER_EXE%" (
     echo   BLENDER_EXE line near the top to the correct path.
     echo  ================================================================
     echo.
-    pause
+    if not defined NO_PAUSE pause
     exit /b 1
 )
 
@@ -174,7 +174,7 @@ if not exist "%BLEND_FILE%" (
     echo     2. Is the BLEND_NAME spelling correct ^(including .blend^)?
     echo  ================================================================
     echo.
-    pause
+    if not defined NO_PAUSE pause
     exit /b 1
 )
 echo [OK] Blend file: %BLEND_FILE%
@@ -284,7 +284,7 @@ if defined FRAME_FAILED (
     echo [%time%] ERROR - Frame %CURRENT% FAILED. Script halted. >> "%LOG_FILE%"
     echo.
     title [STOPPED] Error on frame %CURRENT% - check render_log.txt
-    pause
+    if not defined NO_PAUSE pause
     exit /b 1
 )
 
@@ -384,7 +384,7 @@ echo ================================================================ >> "%LOG_F
 echo. >> "%LOG_FILE%"
 
 title Render Complete  ^|  !FRAMES_DONE! frames  ^|  Avg !AVG_S!.!AVG_D!s/frame
-pause
+if not defined NO_PAUSE pause
 exit /b 0
 
 

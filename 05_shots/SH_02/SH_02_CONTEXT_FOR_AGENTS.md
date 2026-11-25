@@ -1,20 +1,21 @@
 # SH_02 — Shot context for AI agents
 
-**Current version: `SH_02_Tweezers_to_logic_v03.blend`** (draft, Nov 25 2026; waiting for the user's review). It replaces the crossfade between two scenes with one continuous shot. v02 is untouched; its notes start at "v02" below.
+**Current version: `SH_02_Tweezers_to_logic_v04.blend`** (Nov 25 2026, look under review). v03 is the same shot with a clean look; the user approved its story and transitions ("The transitions are smooth and the story works well") but found the atoms "too bright and crisp", "crisp and soulless". v02 is untouched; its notes start at "v02" below.
 
 ## What the shot must do (user, Nov 25)
 
 - Introduce the competing neutral-atom technology, then its 2D representation, then errors and scale. Connectivity matters most overall, but shot 3 and the card after it cover it.
 - Teach the **dot and circle = atom** language here, so SH_15 is easier to read. The atom is SH_15 v22's: nucleus, S-orbital cloud, circle.
 - The user **loves the noise** of the atomic part ("feels more quantum"). Keep grain, bokeh and drifting atoms.
+- **Crisp is reserved for the clean logic cards (user). The real-world atoms should be noisy, washed down, mystical and quantum-like. The haze washing the image down is wanted: never reduce it.**
 - v02's problem: the "2D" logic layer was clearly still in 3D space. **The diagram must be truly flat.**
 - **The red circles are errors.** "The narration doesn't really switch us to the logic, the errors do." Errors start around **frame 70** (v02's started at 90, which forced the crossfade to 66).
 - The camera rises, new grids appear, and we end on "WHAT WE HAVE" (approved idea).
 - Next shot (the chasm) is planned as a **2D card** again: the earlier 3D version needed a camera moving backwards. The card after it (11, matter-only limits) is 2D too and needs no clever transition.
 
-## v03
+## v03 and v04
 
-Built by `sh02_v03_build.py` from v02. **Don't re-run it once the user has edited v03 by hand.** Everything is in `Scene` (1–250), collection `SH02_v03`. `Scene.001` is still in the file but unused.
+Built by `sh02_v04_build.py` (v03: `sh02_v03_build.py`) from v02. **Don't re-run it once the user has edited v04 by hand.** Everything is in `Scene` (1–250), collection `SH02_v04`. `Scene.001` is still in the file but unused.
 
 | Frames | What happens |
 |---|---|
@@ -32,18 +33,28 @@ Built by `sh02_v03_build.py` from v02. **Don't re-run it once the user has edite
 
 **Controls:** `SH02_CTRL` → custom properties, keyframed, with tooltips. `err_1`–`err_9` are the frames at which each error starts (positions: `ERRORS` in the script). Materials read them through drivers.
 
-**Camera:** `Camera_v03` under `CamPitch` under `CamRig`. `CamRig`: rotation Z = azimuth, `zoom` = log of the distance, `pan_x`/`pan_y` = where the hero patch sits, in pixels from the centre. `CamPitch`: rotation X = 90° − elevation.
+**Camera:** `Camera_v04` under `CamPitch` under `CamRig`. `CamRig`: rotation Z = azimuth, `zoom` = log of the distance, `pan_x`/`pan_y` = where the hero patch sits, in pixels from the centre. `CamPitch`: rotation X = 90° − elevation.
+
+
+**v04 look (physics only, gone by frame 114):**
+- **Atoms** (`sh02_atom`): `soft` = grainy, translucent, breathing cloud of points without an outline, trembling in its trap; `crisp` = dot and circle. `quantum` cross-fades them, so the icon condenses out of the cloud. Warm and dim (`WARM`, `P_STR`) in the physics, white in the diagram.
+- **Errors in the physics** are red clouds on a soft dark disc; they condense into red icons with the rest.
+- **Tweezers** (`sh02_tweezers`): v02's salmon wash with v03's narrow waist; animated shimmer along the light.
+- **Haze** back to 1, **bloom** (compositor Glare, Fog Glow, strength 0.40 → 0 over 82–112), shallower focus (f/0.22 at 72).
+- Background atoms have soft edges: they must never be sharper than the trapped ones.
+- About 80 s per 1080p frame at 48 samples while another render shared the GPU.
 
 **Handover:** the last frame is pixel-aligned with card 12c (dots at x = 120 + 30 c, y = 650 − 30 r; checked to 0.2 px; links 22 % white). The animators' card in `04_assets/props/2D-Overlays_FrameK/01_Assets/QS_12c_Bridging/` has the same grid. So the chasm can follow by dissolving into the card once its grid exists (from about 1.8 s). Changing the final `zoom`/`pan` or the compositor's lens distortion breaks this.
 
 **Traps:**
-- v02's timeline markers switched the camera back to the old one; v03 unbinds them.
+- v02's timeline markers switched the camera back to the old one; the build unbinds them.
 - `sh02_atoms`, `sh02_tweezers`: one mesh each, sites stored in attributes (`site`, `err_id`, `rnd`). Analytic line-of-sight shaders, so the circle always faces the camera. `transparent_max_bounces` must stay high (128).
 - `sh02_patch_*` share one plane and one material. Pass index 1 = hero. Below about 15 px between atoms the icons become plain dots, or they shimmer.
-- `trap_cloud_haze` is the slow part (frames 1–112). It is at 0.3 (`haze`): at 1 it washes out the thinner v03 beams.
+- `trap_cloud_haze` is the slow part (frames 1–112). Full strength in v04 (`haze` = 1), as in v02.
 - Tweezers start long (`beam_len`) so frame 1 continues SH_1.
-- Previews: `previews/SH_02_v03_preview.mp4` (16 samples) and `SH_02_v03_into_chasm_card_preview.mp4` (with the 12c movie dissolved in over 238–256).
-- Output: `08_renders/Final_draft/sh_02_v03/`. `render_SH_02.bat` still renders v02.
+- Previews: `previews/SH_02_v04_preview.mp4` (16 samples; frames 136–250 are v03 renders, the diagram is unchanged), `SH_02_v04_still_0084.png`, `SH_02_v03_into_chasm_card_preview.mp4` (handover to the 12c movie).
+- Render: `render_SH_02_v04.bat` (1–250, to `08_renders/Final_draft/sh_02_v04/`; same logic as SH_15's script). `../overnight-render-nov25.bat` runs it, then SH_15 v22. `render_SH_02.bat` still renders v02.
+- **Open (user, Nov 26, sleeping on it):** "maybe a faint circle will be good to keep, something in between". Test: `SH_02_Tweezers_to_logic_v04_faint_circle_TEST.blend` (`circ` in its build script; 0.14 faint, 0.30 soft, 0.62 strong). It writes to its own output folder. Client comparison page: `08_renders/client_review/QS_atom_styles_nov25/index.html` (self-contained).
 
 ---
 
