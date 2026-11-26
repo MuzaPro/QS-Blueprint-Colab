@@ -1,0 +1,24 @@
+shifted 61 keys by 149
+camera tail compressed by 1.0 v11 frames over 342 - 465 ( 26 keys )
+motion blur False compositor False
+card depth 465.6 size 335.23 188.57
+atoms 600
+atom wave 324 -> 394
+first drawn guide verts 624 x 94.2 - 109.1
+photonic anchor [1.091e+02 5.000e-02 2.160e+00] screen <Vector (0.7755, 0.4532, 544.9395)>
+Photonic label width px 337
+atomic anchor (dive cavity) [101.7  -67.7    0.96] xy miss 0.079 screen <Vector (0.6856, 0.5227, 317.3460)>
+Atomic label width px 352
+Atomic anchor depth 317.3 -> 175.6 at 437
+photon mesh verts at 262 14448 ~photons 43
+photon mesh verts at 300 11886 ~photons 35
+photon mesh verts at 340 11802 ~photons 35
+atomic layer glow box [-106.9, 107.1, -70.7, 70.8, -3.2, 5.2] frames (308, 326, 366, 382)
+pentet bottom at end 26.99 (Unit_Anim z 26.83 ) highest other mesh 17.56
+dark plane z at end 26.59
+pentet lift at 400 2.7 dark front x 125.0
+pentet lift at 420 18.8 dark front x 125.0
+pentet lift at 436 26.15 dark front x 125.0
+photonic anchor off-screen at frames none
+atomic anchor off-screen at frames none
+saved C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_12\sh_12_The_Turn_and_the_Reveal_15.blend frames 1 - 462

@@ -110,7 +110,7 @@ From `04_assets/brand/Quantum Source Quick Brand Guide 8-11-2023.pdf`, page 8 (P
 
 ### SH_12: the turn and the reveal (compound architecture)
 
-**File:** `05_shots/SH_12/sh_12_The_Turn_and_the_Reveal_12.blend` (v12, awaiting review; v11 is the user's rendered version). **Frames:** 1–600 (24 s). **Script:** beat 3, "the turn". **Status:** v12 built and test-rendered as stills; not yet rendered in full.
+**File:** `05_shots/SH_12/sh_12_The_Turn_and_the_Reveal_15.blend` (v15, awaiting review; built from v11, the user's version; v13's timing was approved). **Frames:** 1–462 (exactly 18 s 12 f, the user's final-draft length). **Script:** beat 3, "the turn". **Status:** v15 draft render (50 %, 32 samples) under way.
 
 #### What it's for
 
@@ -123,40 +123,43 @@ It comes right after the narration describes PsiQuantum's huge photonic facility
 
 | Element | On screen | Science |
 |---|---|---|
-| Logic card (Card 10) | LIGHT and MATTER grids merge into the PHOTON-ATOM GRID; SH_02's visual language, now with photons | Compound cluster state |
-| Title | **COMPOUND ARCHITECTURE**, large and celebratory, under the lattice | The coined term |
-| Photonic chip | Rises from the bottom; waveguides draw over it, connecting the Fabry–Pérot cavities (cylinders) | Waveguides route single photons: the photonic qubits |
-| Callouts | PHOTONIC QUBITS and ATOMIC QUBITS, timed to the narration and pinned to a waveguide and an atom | |
-| Atom glow wave | In the profile view, tiny shines turn on and off cavity by cavity, left to right | One trapped atom per cavity: the atomic qubits |
-| Pentet | A section breaks up, a 5-cavity sub-unit lifts out, and the camera dives into one cavity | Hands over to SH_15's single cavity |
+| Logic card (Card 10) | LIGHT and MATTER grids merge into the photon-atom grid; SH_02's visual language, now with photons. The card's own "PHOTON- ATOM GRID" words are masked so they don't compete with the title (user) | Compound cluster state |
+| Title | **COMPOUND ARCHITECTURE**, large and celebratory, above the lattice; it slides up as the chip rises, then leaves | The coined term |
+| Photonic chip | Rises from the bottom; waveguides draw over it from the right edge, connecting the Fabry–Pérot cavities (cylinders); a few single photons (cyan comets) then run through them | Waveguides route single photons: the photonic qubits |
+| Callouts | PHOTONIC QUBITS (pinned where the waveguides start drawing, elbow on the right so the leader stays clear of the chip) and ATOMIC QUBITS (pinned to the atom of the cavity the camera later dives into, and carried up with it), timed to the narration | |
+| Atom glow wave + layer glow | In the profile view, tiny shines turn on and off cavity by cavity, left to right, inside a soft brand-blue glow along the middle of the wafer sandwich | One trapped atom per cavity: the atomic qubits |
+| Pentet | A section breaks up, a 5-cavity sub-unit lifts out, and v11's swift camera move dives into it | Hands over to SH_15's single cavity |
 
 #### How it unfolds
 
-| Frames | What happens | Narration *(timing inferred)* |
+Timing is the user's final draft (Nov 26).
+
+| Frames | What happens | Narration |
 |---|---|---|
-| 1–260 | Card 10 plays; the grids combine | "Why choose light or matter when you can leverage the best of both?" |
-| 212–290 | Title builds under the lattice | "Welcome to Quantum Source Compound Architecture." |
-| 261–396 | Chip rises in, waveguides draw, PHOTONIC QUBITS callout | "We combine the … connectivity of flying photonic qubits…" |
-| 422–500 | Profile view, atom wave, ATOMIC QUBITS callout | "…with the stability of stationary atomic qubits." |
-| 486–600 | Break-up, pentet lifts, dive into a cavity; the rest of the chip sinks away; lands exactly on SH_15 frame 50 | |
+| 1–149 | Card 10 plays from its first frame: the LIGHT grid appears, then MATTER | "Why choose light or matter when you can leverage the best of both?" |
+| 88 (3 s 12 f) | The grids begin to merge; the title builds above them | "Welcome to Quantum Source Compound Architecture." |
+| 150 (6 s) | Merge done; the chip floats in from below. The grid overlaps it ~12 frames, then fades; the title slides up and leaves by ~202 | |
+| 238–366 | Waveguides draw; PHOTONIC QUBITS callout, up by "flying" (262, 10 s 11 f) | "We combine the … connectivity of flying photonic qubits…" |
+| 324–398 | Profile view, atom wave, ATOMIC QUBITS callout on "stationary" (346, 13 s 20 f); the two callouts overlap briefly | "…with the stability of stationary atomic qubits." |
+| 375–462 | Break-up, pentet lifts, v11's own camera move dives in, ending close on a cavity. The ATOMIC callout rides the pentet up until 436; a dark floor sweeps in under it (438–456, +X → −X) and rises with it, leaving only the pentet so the cut to the darker SH_15 doesn't flash | |
 
 #### Why it looks this way
 
-- **The card is in the scene, not composited:** a plane at the focus distance, with colour as alpha (user's preference), so black is transparent. It floats above the hardware like SH_18's logic card and drifts away as the chip arrives.
+- **The card is in the scene, not composited:** a plane at the focus distance, with colour as alpha (user's preference), so black is transparent. It floats above the hardware like SH_18's logic card. Briefly overlapping the rising chip says the lattice corresponds to what happens on the chip (user).
 - **Title letters converge from the outside in**, echoing the grids combining. Overpass Light, white, with a brand-cyan rule and eyebrow.
 - **Callouts are elegant data-vis labels** in the brand style (user): Overpass white, cyan accent, hairline leaders. Their placement follows the chip architecture; their timing follows the narration.
 - **Atoms are tiny and subtle, "like a tiny shine" (user).** They turn on, then off as the wave passes, to say "the atoms are there, we just omit them for simplicity" (user).
-- **The dive is a true match cut:** SH_15's pentet is the same 5-cell layout, so the dive ends on SH_15's opening camera pose, lens and depth of field.
+- **The ending is v11's own swift camera move (user).** A custom dive that matched SH_15's first frame exactly (v12) ruined the transition; the speed and blur of the original sell the cut. Don't replace it.
 
 #### Simplifications
 
 - Atoms are normally omitted; the glow wave is a reminder, not a physical process. Never animate light travelling between atoms.
 - The chip shows a handful of tiles; the real machine has thousands of unit cells *(inferred from the script)*.
-- No photons fly in this shot: the waveguides stand for the photonic qubits.
+- Photons are tiny, few and irregular (about 40 on the chip at once, smaller than a cavity) and only on the longer guides; the real chip would carry many more. They dim during the atomic beat.
 
 #### Before editing
 
-Read [05_shots/SH_12/AGENTS.md](05_shots/SH_12/AGENTS.md). Main traps: v12 is built by `sh12_v12_build.py` from v11 (don't re-run it over hand edits); all v11 keys are shifted by +260; the file's working colour space is ACEScg; narration timing is an estimate and is parameterised in the script.
+Read [05_shots/SH_12/AGENTS.md](05_shots/SH_12/AGENTS.md). Main traps: v15 is built by `sh12_v15_build.py` from v11 (don't re-run it over hand edits); all v11 keys are shifted by +149; the file's working colour space is ACEScg; the frame timings above are the user's and are parameters of the script.
 
 ### SH_18: the architecture
 

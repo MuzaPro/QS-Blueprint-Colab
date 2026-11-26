@@ -1,0 +1,12 @@
+shifted 61 keys by 149
+motion blur False compositor False
+card depth 465.6 size 335.23 188.57
+atoms 600
+atom wave 324 -> 394
+photonic anchor [ 43.15 -27.71   2.16] screen <Vector (0.5992, 0.4007, 534.9050)>
+Photonic label width px 337
+atomic anchor [ 77.7  -67.7    0.96] screen <Vector (0.6009, 0.5237, 335.4859)>
+Atomic label width px 352
+photonic anchor off-screen at frames none
+atomic anchor off-screen at frames none
+saved C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_12\sh_12_The_Turn_and_the_Reveal_13.blend frames 1 - 462
