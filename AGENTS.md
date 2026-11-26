@@ -1,6 +1,6 @@
 # QS Blueprint film: guide for agents
 
-Last updated: 2026-11-25. Start here, then read the `AGENTS.md` (or context file) in the folder of the shot you're working on.
+Last updated: 2026-11-26. Start here, then read the `AGENTS.md` (or context file) in the folder of the shot you're working on.
 
 - **This file** holds the story, the science and what each shot is for.
 - **Shot files** hold the technical detail: objects, node groups, bakes, render scripts, change log.
@@ -59,7 +59,21 @@ The paper draws photons cyan and atoms dark blue in its lattice figures.
 - **Aesthetic:** dark, restrained, precise, elegant. "Simple but complex" data-vis graphic design rather than sci-fi spectacle.
 - **Motivated by the physics.** If a simplification is needed for readability, make it deliberately and record it in the shot's notes.
 - **Readability comes first.** If viewers can't follow individual photons, the idea is lost, however accurate the system is.
-- **Brand:** `04_assets/brand/` (quick brand guide, colour palette, Jura for the logo, Overpass for text).
+- **Brand:** `04_assets/brand/` (quick brand guide, colour palette, Jura for the logo, Overpass for text). On-screen text: Overpass (Light, Regular, Medium, SemiBold); the cards' small labels use Overpass Mono. Accent is the logo cyan; on dark scenes the key colour is white.
+
+### Brand colours
+
+From `04_assets/brand/Quantum Source Quick Brand Guide 8-11-2023.pdf`, page 8 (Pantone / sRGB hex):
+
+| Group | Colours |
+|---|---|
+| **Logo colour (accent)** | **P. 319 C `#4DDDEC`** (RGB 77/221/236) |
+| Neutrals | P. Black C `#000000` · P. 432 C `#3D3D3D` · P. 431 C `#595959` · P. 427 C `#E2E2E2` |
+| Deep teals | P. 3035 C `#0F3843` · P. 548 C `#165065` · P. 549 C `#2D8FAC` |
+| Blues | P. 281 C `#04224E` · P. 2748 C `#03397A` · P. 297 C `#597EFF` · P. 2716 C `#98A6F9` · P. 285 C `#057BCC` · P. 2995 C `#00B7FF` · P. 305 C `#00CFFF` · P. 2975 C `#A9ECFC` |
+| Greens / aquas | P. 3252 C `#36E0D4` · P. 561 C `#1C726A` · P. 563 C `#2FBCAE` · P. 566 C `#B5F7ED` |
+
+**Colour-space trap:** these hex values are sRGB. Blender node colours are scene-linear in the file's working space, and some of our files use **ACEScg** (check `bpy.data.colorspace.working_space`). Convert sRGB → linear Rec.709 (→ ACEScg if needed) before typing a brand colour into a node, or it renders paler. `05_shots/SH_12/sh12_v12_build.py` has a `brand_color()` helper.
 
 ## Working here
 
@@ -88,10 +102,61 @@ The paper draws photons cyan and atoms dark blue in its lattice figures.
 |---|---|---|
 | SH_1 | Not yet | [AGENTS.md](05_shots/SH_1/AGENTS.md) |
 | SH_02 | Not yet. Known so far (user, Nov 25): the competing neutral-atom shot. It teaches "dot and circle = atom", the red circles are errors, and the errors (not the narration) move us to the diagram, which must be truly flat. It ends on the "WHAT WE HAVE" grid of the chasm, planned as a 2D card. Crisp is reserved for the diagram: the real-world atoms stay hazy, noisy and quantum-like. v04 is under review | [SH_02_CONTEXT_FOR_AGENTS.md](05_shots/SH_02/SH_02_CONTEXT_FOR_AGENTS.md), [NOTES_FOR_HUMANS.md](05_shots/SH_02/NOTES_FOR_HUMANS.md), [SH_02_ANIMATOR_NOTES.md](05_shots/SH_02/SH_02_ANIMATOR_NOTES.md) |
-| SH_4, SH_7, SH_8, SH_9, SH_11, SH_12, SH_17 | Not yet | None |
+| SH_4, SH_7, SH_8, SH_9, SH_11, SH_17 | Not yet | None |
+| **SH_12** | **Yes** | [AGENTS.md](05_shots/SH_12/AGENTS.md) |
 | SH_15 | Not yet. Known so far (user, Nov 25): it shows the photon entering the cavity in the shape of the photonic mode. The dual rail is only seen **from above**, in the wider view showing several cavities; the photon in the \|0⟩ rail is **not shown**, because that was the focus of the second Quantum Source movie. It shows a vertical Fabry–Pérot cavity: the top is the edge of an optical fibre; the bottom, in reality another fibre edge, is a reflective round mirror for clarity. Horizontal laser tweezers (horizontal so viewers don't confuse them with the vertical photonic mode) hold the atom floating in space, then fade out by frame 185 in a way that implies they are still there but omitted to simplify the visuals. The mode's lobes stay put while their intensity subtly moves up and down, implying the single photon resonating between the mirrors; that detail belongs only to the single-cell part | [AGENTS.md](05_shots/SH_15/AGENTS.md) |
 | **SH_18** | **Yes** | [AGENTS.md](05_shots/SH_18/AGENTS.md) |
 | SH_20 | Not yet | None |
+
+### SH_12: the turn and the reveal (compound architecture)
+
+**File:** `05_shots/SH_12/sh_12_The_Turn_and_the_Reveal_12.blend` (v12, awaiting review; v11 is the user's rendered version). **Frames:** 1–600 (24 s). **Script:** beat 3, "the turn". **Status:** v12 built and test-rendered as stills; not yet rendered in full.
+
+#### What it's for
+
+It comes right after the narration describes PsiQuantum's huge photonic facility, and introduces Quantum Source's answer: the **compound architecture**, photonic and atomic qubits combined, miniaturised onto wafer-made photonic components. "Compound Architecture" is the term the company is coining; it is the central concept of the production (user). The viewer should take away:
+
+1. Light and matter, combined into one lattice: each photon entangled with four atoms, each atom with four photons.
+2. That lattice runs on a small chip: waveguides (photonic qubits) connecting cavities that each hold an atom (atomic qubits).
+
+#### What we see
+
+| Element | On screen | Science |
+|---|---|---|
+| Logic card (Card 10) | LIGHT and MATTER grids merge into the PHOTON-ATOM GRID; SH_02's visual language, now with photons | Compound cluster state |
+| Title | **COMPOUND ARCHITECTURE**, large and celebratory, under the lattice | The coined term |
+| Photonic chip | Rises from the bottom; waveguides draw over it, connecting the Fabry–Pérot cavities (cylinders) | Waveguides route single photons: the photonic qubits |
+| Callouts | PHOTONIC QUBITS and ATOMIC QUBITS, timed to the narration and pinned to a waveguide and an atom | |
+| Atom glow wave | In the profile view, tiny shines turn on and off cavity by cavity, left to right | One trapped atom per cavity: the atomic qubits |
+| Pentet | A section breaks up, a 5-cavity sub-unit lifts out, and the camera dives into one cavity | Hands over to SH_15's single cavity |
+
+#### How it unfolds
+
+| Frames | What happens | Narration *(timing inferred)* |
+|---|---|---|
+| 1–260 | Card 10 plays; the grids combine | "Why choose light or matter when you can leverage the best of both?" |
+| 212–290 | Title builds under the lattice | "Welcome to Quantum Source Compound Architecture." |
+| 261–396 | Chip rises in, waveguides draw, PHOTONIC QUBITS callout | "We combine the … connectivity of flying photonic qubits…" |
+| 422–500 | Profile view, atom wave, ATOMIC QUBITS callout | "…with the stability of stationary atomic qubits." |
+| 486–600 | Break-up, pentet lifts, dive into a cavity; the rest of the chip sinks away; lands exactly on SH_15 frame 50 | |
+
+#### Why it looks this way
+
+- **The card is in the scene, not composited:** a plane at the focus distance, with colour as alpha (user's preference), so black is transparent. It floats above the hardware like SH_18's logic card and drifts away as the chip arrives.
+- **Title letters converge from the outside in**, echoing the grids combining. Overpass Light, white, with a brand-cyan rule and eyebrow.
+- **Callouts are elegant data-vis labels** in the brand style (user): Overpass white, cyan accent, hairline leaders. Their placement follows the chip architecture; their timing follows the narration.
+- **Atoms are tiny and subtle, "like a tiny shine" (user).** They turn on, then off as the wave passes, to say "the atoms are there, we just omit them for simplicity" (user).
+- **The dive is a true match cut:** SH_15's pentet is the same 5-cell layout, so the dive ends on SH_15's opening camera pose, lens and depth of field.
+
+#### Simplifications
+
+- Atoms are normally omitted; the glow wave is a reminder, not a physical process. Never animate light travelling between atoms.
+- The chip shows a handful of tiles; the real machine has thousands of unit cells *(inferred from the script)*.
+- No photons fly in this shot: the waveguides stand for the photonic qubits.
+
+#### Before editing
+
+Read [05_shots/SH_12/AGENTS.md](05_shots/SH_12/AGENTS.md). Main traps: v12 is built by `sh12_v12_build.py` from v11 (don't re-run it over hand edits); all v11 keys are shifted by +260; the file's working colour space is ACEScg; narration timing is an estimate and is parameterised in the script.
 
 ### SH_18: the architecture
 

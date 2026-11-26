@@ -1,0 +1,14 @@
+shifted 61 keys by 260
+card depth 479.2 size 345.02 194.08
+atoms 600
+atom wave 430 -> 500
+photonic anchor [ 43.15 -27.71   2.16] screen <Vector (0.5992, 0.4007, 534.9050)>
+Photonic label width px 337
+atomic anchor [ 77.7  -67.7    0.96] screen <Vector (0.6009, 0.5237, 335.4859)>
+Atomic label width px 352
+SH_15 landing camera Camera.001 lens 85.0 dof False
+dive: start (250.37, -176.45, 87.21) speed 1.84 u/f; dist 172.8
+dive start pos error 0.0
+dive end pos error vs SH_15 f50 0.0
+chip drop on 34 objects from 552
+saved C:\Users\mrgav\Documents\GitHub\QS-Blueprint-Colab\05_shots\SH_12\sh_12_The_Turn_and_the_Reveal_12.blend frames 1 - 600
